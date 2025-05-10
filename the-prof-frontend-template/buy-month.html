@@ -1,0 +1,67 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>شراء الشهر</title>
+  <style>
+    body {
+      margin: 0;
+      font-family: 'Cairo', sans-serif;
+      background: linear-gradient(135deg, #1a202c, #2d3748);
+      color: white;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      height: 100vh;
+      text-align: center;
+    }
+    .buy-box {
+      max-width: 600px;
+      padding: 40px;
+      background-color: #2d3748;
+      border-radius: 15px;
+      box-shadow: 0 10px 25px rgba(0, 0, 0, 0.4);
+    }
+    h1 {
+      color: #ffcc00;
+      font-size: 32px;
+      margin-bottom: 15px;
+    }
+    p {
+      font-size: 18px;
+      margin-bottom: 25px;
+    }
+    .month-details {
+      background-color: #4a5568;
+      padding: 20px;
+      border-radius: 10px;
+      margin-bottom: 25px;
+    }
+    .buy-btn {
+      background-color: #ffcc00;
+      color: #1a202c;
+      padding: 12px 25px;
+      border: none;
+      border-radius: 8px;
+      font-size: 16px;
+      cursor: pointer;
+      transition: background-color 0.3s;
+    }
+    .buy-btn:hover {
+      background-color: #e6b800;
+    }
+  </style>
+</head>
+<body>
+  <div class="buy-box">
+    <h1>💳 اشتراك في شهر مايو</h1>
+    <div class="month-details">
+      <p>📅 اسم الشهر: <strong>مايو</strong></p>
+      <p>💰 السعر: <strong>200 جنيه</strong></p>
+      <p>📘 عدد الدروس: <strong>5</strong></p>
+    </div>
+    <button class="buy-btn" onclick="alert('تم الاشتراك بنجاح!')">✅ أشتري الآن</button>
+  </div>
+</body>
+</html>

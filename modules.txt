@@ -1,0 +1,11 @@
+npm init: Initializes a new Node.js project with a package.json file
+npm i express: Installs Express.js and adds it to dependencies
+npm i -D nodemon: Installs nodemon as a dev dependency for auto-restarting server
+npm i dotenv: Installs dotenv to manage environment variables from a .env file
+npm i ejs: Install EJS templating engine for rendering dynamic HTML
+npm i express-async-handler: Middleware to handle async errors in Express routes without try-catch blocks
+npm i mongoose: Installs Mongoose, a MongoDB object modeling tool for Node.js, to interact with a MongoDB database.
+npm i joi: Installs Joi, a validation library for data validation in Node.js
+npm i bcrypt: Adds bcrypt for password hashing (important for user authentication)
+npm i jsonwebtoken: Install jsonwebtoken, a library used for creating and verifying JSON Web Tokens (JWT) for authentication
+npm i cors: # Install the 'cors' middleware to enable Cross-Origin Resource Sharing in your Node.js/Express app

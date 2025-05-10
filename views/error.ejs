@@ -1,0 +1,124 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title><%= errorTitle || 'خطأ' %></title>
+  <link href="https://fonts.googleapis.com/css2?family=Cairo:wght@400;600;700&display=swap" rel="stylesheet">
+  <style>
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+    }
+
+    body {
+      font-family: 'Cairo', sans-serif;
+      background-color: #1a202c;
+      color: white;
+      min-height: 100vh;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      padding: 20px;
+    }
+
+    .error-container {
+      max-width: 600px;
+      width: 100%;
+      background-color: #2d3748;
+      padding: 40px 30px;
+      border-radius: 15px;
+      box-shadow: 0 0 15px rgba(0,0,0,0.2);
+      text-align: center;
+    }
+
+    .error-icon {
+      font-size: 60px;
+      margin-bottom: 20px;
+    }
+
+    .error-path {
+      font-family: monospace;
+      background-color: #1a202c;
+      padding: 8px 12px;
+      border-radius: 5px;
+      margin: 15px 0;
+      font-size: 14px;
+      color: #a0aec0;
+      word-break: break-all;
+    }
+
+    h1 {
+      color: #ff4d4d;
+      margin-bottom: 20px;
+      font-size: 28px;
+    }
+
+    p {
+      margin-bottom: 30px;
+      font-size: 18px;
+      line-height: 1.6;
+    }
+
+    .btn {
+      display: inline-block;
+      background-color: #4a5568;
+      color: white;
+      padding: 12px 25px;
+      border-radius: 8px;
+      text-decoration: none;
+      font-size: 16px;
+      transition: all 0.3s ease;
+      margin: 0 10px;
+    }
+
+    .btn:hover {
+      background-color: #718096;
+      transform: translateY(-3px);
+    }
+
+    .btn-primary {
+      background-color: #fbbf24;
+      color: #1a202c;
+    }
+
+    .btn-primary:hover {
+      background-color: #f59e0b;
+    }
+
+    @media (max-width: 480px) {
+      .error-container {
+        padding: 30px 20px;
+      }
+
+      h1 {
+        font-size: 24px;
+      }
+
+      p {
+        font-size: 16px;
+      }
+
+      .btn {
+        display: block;
+        margin: 10px auto;
+      }
+    }
+  </style>
+</head>
+<body>
+  <div class="error-container">
+    <div class="error-icon">❌</div>
+    <h1><%= errorTitle || 'حدث خطأ' %></h1>
+    <p><%= errorMessage || 'حدث خطأ غير متوقع. يرجى المحاولة مرة أخرى.' %></p>
+    <% if (typeof path !== 'undefined') { %>
+      <p class="error-path"><%= path %></p>
+    <% } %>
+    <div>
+      <a href="/" class="btn">العودة للصفحة الرئيسية</a>
+      <a href="/auth/login" class="btn btn-primary">تسجيل الدخول</a>
+    </div>
+  </div>
+</body>
+</html>

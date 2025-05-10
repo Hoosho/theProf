@@ -1,0 +1,384 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>تفاصيل الشهر</title>
+  <link href="https://fonts.googleapis.com/css2?family=Cairo:wght@400;600;700&display=swap" rel="stylesheet">
+  <style>
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+      font-family: 'Cairo', sans-serif;
+    }
+
+    body {
+      background: linear-gradient(135deg, #1a202c, #2d3748);
+      color: white;
+      margin: 0;
+      padding: 0;
+      min-height: 100vh;
+    }
+
+    .container {
+      max-width: 1000px;
+      margin: auto;
+      padding: 40px 20px;
+    }
+
+    header {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      margin-bottom: 30px;
+      background-color: rgba(45, 55, 72, 0.8);
+      padding: 15px 25px;
+      border-radius: 12px;
+      box-shadow: 0 4px 15px rgba(0, 0, 0, 0.2);
+      backdrop-filter: blur(10px);
+    }
+
+    h1 {
+      color: #fbbf24;
+      font-size: 28px;
+      font-weight: 700;
+    }
+
+    .back-btn {
+      background-color: #4a5568;
+      color: white;
+      padding: 10px 20px;
+      border-radius: 8px;
+      text-decoration: none;
+      transition: all 0.3s ease;
+      font-weight: 600;
+      display: inline-flex;
+      align-items: center;
+      box-shadow: 0 2px 5px rgba(0, 0, 0, 0.2);
+    }
+
+    .back-btn:hover {
+      background-color: #718096;
+      transform: translateY(-3px);
+      box-shadow: 0 4px 8px rgba(0, 0, 0, 0.3);
+    }
+
+    .month-info {
+      background-color: rgba(45, 55, 72, 0.9);
+      padding: 25px;
+      border-radius: 15px;
+      margin-bottom: 30px;
+      box-shadow: 0 5px 20px rgba(0, 0, 0, 0.3);
+      border: 1px solid rgba(255, 255, 255, 0.1);
+    }
+
+    .month-title {
+      font-size: 26px;
+      color: #fbbf24;
+      margin-bottom: 15px;
+      font-weight: 700;
+    }
+
+    .month-details {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 15px;
+      margin-top: 15px;
+    }
+
+    .month-price, .month-grade {
+      font-size: 18px;
+      background-color: rgba(74, 85, 104, 0.7);
+      display: inline-block;
+      padding: 8px 15px;
+      border-radius: 8px;
+    }
+
+    .lessons-header {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      margin-bottom: 20px;
+      padding: 0 10px;
+    }
+
+    .lessons-header {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      flex-wrap: wrap;
+    }
+
+    .lessons-header h2 {
+      font-size: 24px;
+      color: #e2e8f0;
+      position: relative;
+    }
+
+    .lessons-header h2:after {
+      content: '';
+      position: absolute;
+      bottom: -8px;
+      left: 0;
+      width: 50px;
+      height: 3px;
+      background-color: #fbbf24;
+      border-radius: 3px;
+    }
+
+    .lessons-count {
+      background-color: rgba(74, 85, 104, 0.7);
+      padding: 5px 12px;
+      border-radius: 20px;
+      font-size: 14px;
+      color: #fbbf24;
+      font-weight: 600;
+    }
+
+    .lessons-container {
+      display: grid;
+      grid-template-columns: 1fr;
+      gap: 25px;
+    }
+
+    .lesson {
+      background-color: rgba(74, 85, 104, 0.8);
+      padding: 25px;
+      border-radius: 15px;
+      transition: all 0.3s ease;
+      box-shadow: 0 4px 12px rgba(0, 0, 0, 0.2);
+      border: 1px solid rgba(255, 255, 255, 0.05);
+      position: relative;
+      overflow: hidden;
+    }
+
+    .lesson:hover {
+      transform: translateY(-5px);
+      box-shadow: 0 8px 20px rgba(0, 0, 0, 0.3);
+      background-color: rgba(74, 85, 104, 0.9);
+    }
+
+    .lesson:before {
+      content: '';
+      position: absolute;
+      top: 0;
+      left: 0;
+      width: 5px;
+      height: 100%;
+      background-color: #fbbf24;
+      border-radius: 5px 0 0 5px;
+    }
+
+    .lesson-title {
+      font-size: 22px;
+      color: #fbbf24;
+      margin-bottom: 12px;
+      font-weight: 700;
+    }
+
+    .lesson-description {
+      margin-bottom: 10px;
+      line-height: 1.6;
+      color: #e2e8f0;
+      font-size: 16px;
+    }
+
+    .lesson-info {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 10px;
+      margin-bottom: 15px;
+    }
+
+    .lesson-grade, .lesson-id {
+      font-size: 14px;
+      color: #a0aec0;
+      background-color: rgba(74, 85, 104, 0.5);
+      display: inline-block;
+      padding: 5px 10px;
+      border-radius: 5px;
+    }
+
+    .current-month {
+      border-right: 5px solid #4299e1;
+      background-color: rgba(66, 153, 225, 0.1);
+    }
+
+    .other-month {
+      border-right: 5px solid #a0aec0;
+      opacity: 0.85;
+    }
+
+    .current-month-badge, .other-month-badge {
+      position: absolute;
+      top: 10px;
+      left: 10px;
+      font-size: 12px;
+      padding: 3px 8px;
+      border-radius: 4px;
+      font-weight: 600;
+    }
+
+    .current-month-badge {
+      background-color: #4299e1;
+      color: white;
+    }
+
+    .other-month-badge {
+      background-color: #a0aec0;
+      color: #1a202c;
+    }
+
+    .lesson-actions {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 12px;
+    }
+
+    .lesson-btn {
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      background-color: #fbbf24;
+      color: #1a202c;
+      padding: 10px 18px;
+      border-radius: 8px;
+      text-decoration: none;
+      font-size: 16px;
+      font-weight: 600;
+      transition: all 0.3s ease;
+      box-shadow: 0 2px 5px rgba(0, 0, 0, 0.2);
+      min-width: 140px;
+    }
+
+    .lesson-btn:hover {
+      background-color: #f59e0b;
+      transform: translateY(-3px);
+      box-shadow: 0 4px 8px rgba(0, 0, 0, 0.3);
+    }
+
+    .video-btn {
+      background-color: #3182ce;
+    }
+
+    .video-btn:hover {
+      background-color: #2c5282;
+    }
+
+    .pdf-btn {
+      background-color: #e53e3e;
+    }
+
+    .pdf-btn:hover {
+      background-color: #c53030;
+    }
+
+    .exam-btn {
+      background-color: #38a169;
+    }
+
+    .exam-btn:hover {
+      background-color: #2f855a;
+    }
+
+    .lesson-number {
+      position: absolute;
+      top: 15px;
+      right: 15px;
+      background-color: rgba(26, 32, 44, 0.7);
+      color: #fbbf24;
+      width: 30px;
+      height: 30px;
+      border-radius: 50%;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-weight: bold;
+      font-size: 14px;
+    }
+
+    @media (min-width: 768px) {
+      .lessons-container {
+        grid-template-columns: repeat(2, 1fr);
+      }
+    }
+
+    @media (max-width: 768px) {
+      header {
+        flex-direction: column;
+        gap: 15px;
+        text-align: center;
+      }
+
+      .lesson-actions {
+        flex-direction: column;
+      }
+
+      .lesson-btn {
+        width: 100%;
+      }
+    }
+  </style>
+</head>
+<body>
+  <div class="container">
+    <header>
+      <h1>تفاصيل الشهر</h1>
+      <a href="/student/dashboard" class="back-btn">العودة للوحة التحكم</a>
+    </header>
+
+    <div class="month-info">
+      <h2 class="month-title">📅 شهر: <%= month.name %></h2>
+      <div class="month-details">
+        <div class="month-price">💰 السعر: <%= month.price %> جنيه</div>
+        <div class="month-grade">📚 السنة الدراسية: <%= month.grade %></div>
+      </div>
+    </div>
+
+    <div class="lessons-header">
+      <h2>جميع الدروس المتاحة من المعلم</h2>
+      <p class="lessons-count">إجمالي عدد الدروس: <%= lessons.length %></p>
+    </div>
+
+    <div class="lessons-container">
+      <% if (lessons && lessons.length > 0) { %>
+        <% lessons.forEach((lesson, index) => { %>
+          <div class="lesson <%= lesson.isCurrentMonth ? 'current-month' : 'other-month' %>">
+            <div class="lesson-number"><%= index + 1 %></div>
+            <% if (lesson.isCurrentMonth) { %>
+              <div class="current-month-badge">شهر <%= month.name %></div>
+            <% } else { %>
+              <%
+                // البحث عن اسم الشهر المرتبط بالدرس
+                const lessonMonth = teacher.availableMonths.find(m => m.id === lesson.monthId);
+                const monthName = lessonMonth ? lessonMonth.name : 'غير معروف';
+              %>
+              <div class="other-month-badge">شهر <%= monthName %></div>
+            <% } %>
+            <h3 class="lesson-title">🎬 <%= lesson.title %></h3>
+            <p class="lesson-description"><%= lesson.description %></p>
+            <div class="lesson-info">
+              <span class="lesson-grade">📚 السنة الدراسية: <%= lesson.grade %></span>
+              <span class="lesson-id">🔢 رقم الدرس: <%= lesson.id %></span>
+            </div>
+            <div class="lesson-actions">
+              <a href="/student/watch-video/<%= lesson.id %>" class="lesson-btn video-btn">مشاهدة الفيديو 📺</a>
+              <% if (lesson.pdf && lesson.pdf.trim() !== '') { %>
+                <a href="/student/download-pdf/<%= lesson.id %>" class="lesson-btn pdf-btn">تحميل الملف 📄</a>
+              <% } %>
+              <% if (lesson.exams && lesson.exams.trim() !== '') { %>
+                <a href="/student/take-exam/<%= lesson.id %>" class="lesson-btn exam-btn">الاختبار 📝</a>
+              <% } %>
+            </div>
+          </div>
+        <% }) %>
+      <% } else { %>
+        <div class="lesson">
+          <p style="text-align: center; padding: 30px;">لا توجد دروس متاحة في هذا الشهر حاليًا.</p>
+        </div>
+      <% } %>
+    </div>
+  </div>
+</body>
+</html>

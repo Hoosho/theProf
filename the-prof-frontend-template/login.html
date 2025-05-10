@@ -1,0 +1,81 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>تسجيل الدخول</title>
+  <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;600&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="../public/css/main.css">
+  <style>
+    .login-container {
+      max-width: 400px;
+      width: 100%;
+      background-color: #2d3748;
+      padding: 40px 25px;
+      border-radius: 15px;
+      box-shadow: 0 0 15px rgba(0,0,0,0.2);
+      text-align: center;
+    }
+
+    .login-container h2 {
+      font-size: 30px;
+      margin-bottom: 20px;
+      color: #fbbf24;
+    }
+
+    .login-container input {
+      width: 100%;
+      padding: 15px;
+      margin-bottom: 20px;
+      border-radius: 8px;
+      border: none;
+      font-size: 16px;
+    }
+
+    .login-container button {
+      background-color: #fbbf24;
+      color: black;
+      padding: 12px;
+      width: 100%;
+      border: none;
+      border-radius: 8px;
+      font-size: 18px;
+      cursor: pointer;
+      transition: 0.3s;
+    }
+
+    .login-container button:hover {
+      background-color: #f59e0b;
+    }
+
+    @media (max-width: 480px) {
+      .login-container {
+        padding: 30px 20px;
+      }
+
+      .login-container h2 {
+        font-size: 24px;
+      }
+
+      .login-container input {
+        font-size: 15px;
+      }
+
+      .login-container button {
+        font-size: 16px;
+      }
+    }
+  </style>
+</head>
+<body>
+  <div class="container">
+    <div class="login-container">
+      <h2>سجل دخولك بالكود</h2>
+      <form action="/login" method="POST">
+        <input type="text" name="code" placeholder="اكتب كودك يا نجم" required />
+        <button type="submit">ادخلني</button>
+      </form>
+    </div>
+  </div>
+</body>
+</html>

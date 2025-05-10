@@ -1,0 +1,52 @@
+<!-- HTML for Dashboard -->
+
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>لوحة تحكم</title>
+</head>
+<body>
+  <div class="dashboard">
+    <h1>مرحباً، <span id="user-name">المستخدم</span></h1>
+    <a href="/logout">تسجيل الخروج</a>
+  </div>
+
+  <script>
+    const getCookie = (name) => {
+      let match = document.cookie.match(new RegExp('(^| )' + name + '=([^;]+)'));
+      if (match) return match[2];
+      return null;
+    };
+
+    const token = getCookie('accessToken');
+    if (!token) {
+      window.location.href = '/auth/login';  // إعادة التوجيه لصفحة تسجيل الدخول إذا التوكن مش موجود
+    } else {
+      fetch('/api/protected', {
+        method: 'GET',
+        headers: {
+          'Authorization': `Bearer ${token}`,
+        },
+        credentials: 'same-origin',
+      })
+      .then(res => res.json())
+      .then(data => {
+        // التحقق من دور المستخدم وتوجيهه للصفحة الصحيحة
+        if (data.data.role === 'teacher') {
+          window.location.href = '/teacher/dashboard';  // التوجيه لصفحة المعلم
+        } else if (data.data.role === 'student') {
+          window.location.href = '/student/dashboard';  // التوجيه لصفحة الطالب
+        } else {
+          window.location.href = '/auth/login';  // إذا ما كانش فيه دور صالح
+        }
+      })
+      .catch(err => {
+        console.error(err);
+        window.location.href = '/auth/login';  // في حالة حدوث خطأ
+      });
+    }
+  </script>
+</body>
+</html>

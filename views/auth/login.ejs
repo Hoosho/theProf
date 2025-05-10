@@ -1,0 +1,229 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>تسجيل الدخول</title>
+  <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;600&family=Cairo:wght@400;600;700&display=swap" rel="stylesheet">
+  <style>
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+    }
+
+    body {
+      font-family: 'Cairo', 'Poppins', sans-serif;
+      background-color: #1a202c;
+      color: white;
+      min-height: 100vh;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+    }
+
+    .container {
+      width: 100%;
+      padding: 20px;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+    }
+
+    .login-container {
+      max-width: 400px;
+      width: 100%;
+      background-color: #2d3748;
+      padding: 40px 25px;
+      border-radius: 15px;
+      box-shadow: 0 0 15px rgba(0,0,0,0.2);
+      text-align: center;
+    }
+
+    .login-container h2 {
+      font-size: 30px;
+      margin-bottom: 20px;
+      color: #fbbf24;
+    }
+
+    .login-container input, .login-container select {
+      width: 100%;
+      padding: 15px;
+      margin-bottom: 20px;
+      border-radius: 8px;
+      border: none;
+      font-size: 16px;
+    }
+
+    .login-container button {
+      background-color: #fbbf24;
+      color: black;
+      padding: 12px;
+      width: 100%;
+      border: none;
+      border-radius: 8px;
+      font-size: 18px;
+      cursor: pointer;
+      transition: 0.3s;
+    }
+
+    .login-container button:hover {
+      background-color: #f59e0b;
+    }
+
+    .message {
+      margin: 15px 0 25px;
+      padding: 12px;
+      border-radius: 8px;
+      display: none;
+      font-size: 16px;
+      font-weight: 600;
+      text-align: center;
+      box-shadow: 0 2px 5px rgba(0,0,0,0.1);
+      transition: all 0.3s ease;
+    }
+
+    .error {
+      background-color: #ffd7d7;
+      color: #c62828;
+      border-right: 4px solid #c62828;
+    }
+
+    .success {
+      background-color: #d4edda;
+      color: #155724;
+      border-right: 4px solid #28a745;
+    }
+
+    .note {
+      margin-top: 20px;
+      font-size: 14px;
+      color: #a0aec0;
+    }
+
+    @media (max-width: 480px) {
+      .login-container {
+        padding: 30px 20px;
+      }
+
+      .login-container h2 {
+        font-size: 24px;
+      }
+
+      .login-container input, .login-container select {
+        font-size: 15px;
+      }
+
+      .login-container button {
+        font-size: 16px;
+      }
+    }
+  </style>
+</head>
+<body>
+  <div class="container">
+    <div class="login-container">
+      <h2>سجل دخولك بالكود</h2>
+      <div id="message" class="message"></div>
+      <form id="loginForm">
+        <input type="text" id="code" name="code" placeholder="اكتب كودك يا نجم" required />
+        <select id="role" name="role">
+          <option value="teacher">معلم</option>
+          <option value="student">طالب</option>
+        </select>
+        <button type="submit">ادخلني</button>
+      </form>
+      <div class="note">
+        <p>أكواد الاختبار:</p>
+        <p>طالب 1: <strong id="student1-id">جاري التحميل...</strong></p>
+        <p>طالب 2: <strong id="student2-id">جاري التحميل...</strong></p>
+        <p>معلم: <strong id="teacher-id">جاري التحميل...</strong></p>
+      </div>
+    </div>
+  </div>
+
+  <script>
+    // جلب أكواد الاختبار من الخادم
+    fetch('/auth/test-ids')
+      .then(res => res.json())
+      .then(data => {
+        document.getElementById('student1-id').textContent = data.student1Id || 'غير متوفر';
+        document.getElementById('student2-id').textContent = data.student2Id || 'غير متوفر';
+        document.getElementById('teacher-id').textContent = data.teacherId || 'غير متوفر';
+      })
+      .catch(err => {
+        console.error('خطأ في جلب أكواد الاختبار:', err);
+      });
+
+    // دالة لعرض رسائل الخطأ أو النجاح
+    function showMessage(message, type) {
+      const messageElement = document.getElementById('message');
+      messageElement.textContent = message;
+      messageElement.style.display = 'block';
+
+      // إزالة جميع الفئات
+      messageElement.classList.remove('error', 'success');
+
+      // إضافة الفئة المناسبة
+      if (type === 'error') {
+        messageElement.classList.add('error');
+      } else if (type === 'success') {
+        messageElement.classList.add('success');
+      }
+    }
+
+    document.querySelector("#loginForm").addEventListener("submit", async function(e) {
+      e.preventDefault(); // منع إعادة تحميل الصفحة
+
+      const code = document.getElementById("code").value;
+      const role = document.getElementById("role").value;
+
+      if (!code || !role) {
+        showMessage("يرجى إدخال جميع البيانات.", "error");
+        return;
+      }
+
+      // إظهار رسالة التحميل
+      showMessage("جاري تسجيل الدخول...", "");
+
+      // إرسال البيانات إلى السيرفر
+      fetch('/auth/login', {
+        method: 'POST',
+        body: JSON.stringify({
+          code: code,
+          role: role
+        }),
+        headers: {
+          'Content-Type': 'application/json'
+        }
+      })
+      .then(res => res.json())
+      .then(data => {
+        console.log(data);
+        if (data.authorization) {
+          // تخزين التوكن في الكوكيز
+          document.cookie = `accessToken=${data.authorization}; path=/; SameSite=Lax;`;
+
+          // عرض رسالة النجاح
+          showMessage(`تم تسجيل الدخول بنجاح! مرحبًا ${data.name}`, "success");
+
+          // الانتقال إلى الصفحة المناسبة بعد ثانيتين
+          setTimeout(() => {
+            if (data.role === 'teacher') {
+              window.location.href = '/teacher/dashboard';
+            } else if (data.role === 'student') {
+              window.location.href = '/student/dashboard';
+            }
+          }, 2000);
+        } else {
+          showMessage(data.errorMessage || "حدث خطأ غير متوقع.", "error");
+        }
+      })
+      .catch(err => {
+        console.error(err);
+        showMessage("حدث خطأ أثناء الاتصال بالخادم.", "error");
+      });
+    });
+  </script>
+</body>
+</html>

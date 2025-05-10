@@ -1,0 +1,47 @@
+<!-- views/student/dashboard.ejs -->
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>لوحة تحكم الطالب</title>
+  <link rel="stylesheet" href="/css/main.css">
+</head>
+<body>
+  <div class="dashboard">
+    <h1>مرحباً، <span id="student-name">الطالب</span></h1>
+    <a href="/logout" class="logout">تسجيل الخروج</a>
+  </div>
+
+  <script>
+    const getCookie = (name) => {
+      let match = document.cookie.match(new RegExp('(^| )' + name + '=([^;]+)'));
+      if (match) return match[2];
+      return null;
+    };
+
+    const token = getCookie('accessToken');
+    if (!token) {
+      window.location.href = '/auth/login';
+    } else {
+      fetch('/api/protected', {
+        headers: {
+          'Authorization': `Bearer ${token}`
+        }
+      })
+      .then(res => res.json())
+      .then(data => {
+        if (data.role === 'student') {
+          document.getElementById('student-name').textContent = data.name;
+        } else {
+          window.location.href = '/teacher/dashboard';
+        }
+      })
+      .catch(err => {
+        console.error(err);
+        window.location.href = '/auth/login';
+      });
+    }
+  </script>
+</body>
+</html>

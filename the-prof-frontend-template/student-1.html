@@ -1,0 +1,231 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+  <meta charset="UTF-8">
+  <title>الملف الشخصي للطالب</title>
+  <style>
+    * {
+      box-sizing: border-box;
+    }
+
+    body {
+      background: linear-gradient(to bottom, #1f2937, #111827);
+      color: white;
+      font-family: 'Poppins', sans-serif;
+      margin: 0;
+      padding: 0;
+    }
+
+    header {
+      background-color: #111827;
+      padding: 15px 30px;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      border-bottom: 1px solid #374151;
+    }
+
+    header h1 {
+      margin: 0;
+      font-size: 24px;
+      color: #fbbf24;
+    }
+
+    header button {
+      background-color: #f87171;
+      border: none;
+      color: white;
+      padding: 8px 16px;
+      border-radius: 5px;
+      cursor: pointer;
+    }
+
+    .layout {
+      display: flex;
+      min-height: 100vh;
+      animation: fadeIn 0.7s ease-in-out;
+    }
+
+    @keyframes fadeIn {
+      from { opacity: 0; transform: translateY(10px); }
+      to { opacity: 1; transform: translateY(0); }
+    }
+
+    .sidebar {
+      width: 220px;
+      background-color: #1f2937;
+      padding: 30px 20px;
+      border-left: 1px solid #374151;
+    }
+
+    .sidebar a {
+      display: block;
+      color: #e5e7eb;
+      margin-bottom: 15px;
+      text-decoration: none;
+      font-weight: 500;
+    }
+
+    .sidebar a:hover {
+      color: #fbbf24;
+    }
+
+    .container {
+      flex: 1;
+      padding: 30px;
+    }
+
+    h2 {
+      color: #facc15;
+    }
+
+    .month {
+      background-color: #2d3748;
+      border-radius: 10px;
+      padding: 20px;
+      margin-bottom: 25px;
+    }
+
+    .lesson {
+      background-color: #374151;
+      padding: 12px;
+      margin-bottom: 10px;
+      border-radius: 8px;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+    }
+
+    .lesson button {
+      padding: 6px 14px;
+      background-color: #fbbf24;
+      border: none;
+      border-radius: 5px;
+      font-weight: bold;
+      cursor: pointer;
+    }
+
+    .lesson button[disabled] {
+      opacity: 0.6;
+      cursor: default;
+    }
+
+    .progress-bar {
+      background-color: #4b5563;
+      border-radius: 6px;
+      height: 10px;
+      overflow: hidden;
+      margin: 10px 0 15px;
+    }
+
+    .progress {
+      background-color: #f59e0b;
+      height: 100%;
+      width: 60%;
+    }
+
+    footer {
+      background-color: #111827;
+      text-align: center;
+      padding: 20px;
+      color: #9ca3af;
+      border-top: 1px solid #374151;
+    }
+
+    /* Responsive */
+    @media (max-width: 768px) {
+      .layout {
+        flex-direction: column;
+      }
+
+      .sidebar {
+        width: 100%;
+        border-left: none;
+        border-top: 1px solid #374151;
+        display: flex;
+        justify-content: space-around;
+      }
+
+      .sidebar a {
+        margin-bottom: 0;
+      }
+
+      .container {
+        padding: 20px 15px;
+      }
+
+      header {
+        flex-direction: column;
+        align-items: flex-start;
+      }
+
+      header button {
+        margin-top: 10px;
+      }
+    }
+  </style>
+</head>
+<body>
+
+  <!-- Header -->
+  <header>
+    <h1>📚 منصّة التعليم</h1>
+    <button>تسجيل الخروج</button>
+  </header>
+
+  <!-- Main layout -->
+  <div class="layout">
+    
+    <!-- Sidebar -->
+    <div class="sidebar">
+      <a href="#">🏠 الرئيسية</a>
+      <a href="#">📘 الدروس</a>
+      <a href="#">📅 الحضور</a>
+      <a href="#">⚙️ الإعدادات</a>
+    </div>
+
+    <!-- Main content -->
+    <div class="container">
+      <h2>👋 أهلاً يا كريم</h2>
+
+      <!-- شهر مايو -->
+      <div class="month">
+        <h2>شهر مايو</h2>
+        <div class="progress-bar">
+          <div class="progress" style="width: 60%;"></div>
+        </div>
+        <div class="lesson">
+          <span>الدرس الأول: مقدمة في الرياضيات</span>
+          <button>ابدأ</button>
+        </div>
+        <div class="lesson">
+          <span>الدرس الثاني: تمارين ومسائل</span>
+          <button>أكمل</button>
+        </div>
+        <div class="lesson">
+          <span>الدرس الثالث: مراجعة</span>
+          <button disabled>مقفل</button>
+        </div>
+      </div>
+
+      <!-- شهر أبريل -->
+      <div class="month">
+        <h2>شهر أبريل</h2>
+        <div class="progress-bar">
+          <div class="progress" style="width: 90%;"></div>
+        </div>
+        <div class="lesson">
+          <span>الدرس 1: مراجعة عامة</span>
+          <button>إعادة</button>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Footer -->
+  <footer>
+    &copy; 2025 جميع الحقوق محفوظة لمنصة التعليم
+  </footer>
+
+</body>
+</html>

@@ -1,0 +1,241 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>إضافة شهر جديد</title>
+  <link href="https://fonts.googleapis.com/css2?family=Cairo:wght@400;600;700&display=swap" rel="stylesheet">
+  <style>
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+      font-family: 'Cairo', sans-serif;
+    }
+    
+    body {
+      background: linear-gradient(135deg, #2d3748, #1f2937, #4a5568);
+      color: white;
+      min-height: 100vh;
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
+      align-items: center;
+      padding: 20px;
+    }
+
+    .container {
+      width: 100%;
+      max-width: 1200px;
+      margin: 0 auto;
+      padding: 20px;
+    }
+
+    .form-container {
+      max-width: 500px;
+      background-color: #2d3748;
+      padding: 40px 25px;
+      border-radius: 15px;
+      box-shadow: 0 10px 25px rgba(0,0,0,0.3);
+      margin: auto;
+      border: 1px solid rgba(255,255,255,0.1);
+    }
+
+    .form-container h2 {
+      color: #fbbf24;
+      margin-bottom: 25px;
+      font-family: 'Cairo', sans-serif;
+      text-align: center;
+      font-size: 28px;
+      font-weight: 700;
+    }
+
+    .form-container input,
+    .form-container select {
+      width: 100%;
+      padding: 15px;
+      margin-bottom: 20px;
+      border-radius: 8px;
+      border: 1px solid rgba(255,255,255,0.1);
+      font-size: 16px;
+      background-color: #4a5568;
+      color: white;
+      font-family: 'Cairo', sans-serif;
+      transition: all 0.3s ease;
+    }
+
+    .form-container input:focus,
+    .form-container select:focus {
+      outline: none;
+      border-color: #fbbf24;
+      box-shadow: 0 0 0 2px rgba(251, 191, 36, 0.3);
+    }
+
+    .form-container input::placeholder {
+      color: #a0aec0;
+    }
+
+    .form-container button {
+      background-color: #fbbf24;
+      color: #1a202c;
+      padding: 15px;
+      width: 100%;
+      border: none;
+      border-radius: 8px;
+      font-size: 18px;
+      cursor: pointer;
+      transition: 0.3s;
+      font-family: 'Cairo', sans-serif;
+      font-weight: bold;
+      box-shadow: 0 4px 6px rgba(0,0,0,0.1);
+    }
+
+    .form-container button:hover {
+      background-color: #f59e0b;
+      transform: translateY(-3px);
+      box-shadow: 0 6px 12px rgba(0,0,0,0.15);
+    }
+
+    .back-link {
+      display: block;
+      text-align: center;
+      margin-top: 20px;
+      color: #a0aec0;
+      text-decoration: none;
+      transition: 0.3s;
+      font-size: 16px;
+    }
+
+    .back-link:hover {
+      color: #fbbf24;
+    }
+
+    .message {
+      margin: 0 0 20px;
+      padding: 15px;
+      border-radius: 8px;
+      display: none;
+      font-size: 16px;
+      font-weight: 600;
+      text-align: center;
+      box-shadow: 0 2px 5px rgba(0,0,0,0.1);
+    }
+
+    .error {
+      background-color: #ffd7d7;
+      color: #c62828;
+      border-right: 4px solid #c62828;
+    }
+
+    .success {
+      background-color: #d4edda;
+      color: #155724;
+      border-right: 4px solid #28a745;
+    }
+
+    @media (max-width: 480px) {
+      .form-container {
+        padding: 30px 20px;
+      }
+
+      .form-container h2 {
+        font-size: 24px;
+      }
+
+      .form-container input,
+      .form-container select {
+        font-size: 15px;
+      }
+
+      .form-container button {
+        font-size: 16px;
+      }
+    }
+  </style>
+</head>
+<body>
+  <div class="container">
+    <div class="form-container">
+      <h2>➕ خلينا نضيف شهر جديد</h2>
+      <div id="message" class="message"></div>
+      <form id="createMonthForm">
+        <input type="text" id="name" name="name" placeholder="اكتب اسم الشهر" required>
+        <select id="grade" name="grade" required>
+          <option disabled selected>اختر المرحلة الدراسية</option>
+          <option value="1">أولى إعدادي</option>
+          <option value="2">ثانية إعدادي</option>
+          <option value="3">ثالثة إعدادي</option>
+          <option value="4">أولى ثانوي</option>
+          <option value="5">ثانية ثانوي</option>
+          <option value="6">ثالثة ثانوي</option>
+        </select>
+        <input type="number" id="price" name="price" placeholder="سعر الشهر" required>
+        <button type="submit">إضافة الشهر 📅</button>
+      </form>
+      <a href="/teacher/dashboard" class="back-link">العودة للوحة التحكم</a>
+    </div>
+  </div>
+  
+  <script>
+    // دالة لعرض رسائل الخطأ أو النجاح
+    function showMessage(message, type) {
+      const messageElement = document.getElementById('message');
+      messageElement.textContent = message;
+      messageElement.style.display = 'block';
+      
+      // إزالة جميع الفئات
+      messageElement.classList.remove('error', 'success');
+      
+      // إضافة الفئة المناسبة
+      if (type === 'error') {
+        messageElement.classList.add('error');
+      } else if (type === 'success') {
+        messageElement.classList.add('success');
+      }
+    }
+
+    document.getElementById('createMonthForm').addEventListener('submit', async function(e) {
+      e.preventDefault();
+      
+      const formData = {
+        name: document.getElementById('name').value,
+        grade: parseInt(document.getElementById('grade').value),
+        price: parseInt(document.getElementById('price').value)
+      };
+      
+      // التحقق من البيانات
+      if (!formData.name || isNaN(formData.grade) || isNaN(formData.price)) {
+        showMessage('يرجى إدخال جميع البيانات بشكل صحيح', 'error');
+        return;
+      }
+      
+      try {
+        // إظهار رسالة التحميل
+        showMessage('جاري إضافة الشهر...', '');
+        
+        const response = await fetch('/teacher/create-month', {
+          method: 'POST',
+          headers: {
+            'Content-Type': 'application/json'
+          },
+          body: JSON.stringify(formData)
+        });
+        
+        const data = await response.json();
+        
+        if (response.ok) {
+          showMessage('تم إضافة الشهر بنجاح! 🎉', 'success');
+          setTimeout(() => {
+            window.location.href = '/teacher/dashboard';
+          }, 2000);
+        } else {
+          showMessage(data.errorMessage || 'حدث خطأ أثناء إضافة الشهر', 'error');
+        }
+      } catch (error) {
+        console.error('Error:', error);
+        showMessage('حدث خطأ أثناء الاتصال بالخادم', 'error');
+      }
+    });
+  </script>
+</body>
+</html>

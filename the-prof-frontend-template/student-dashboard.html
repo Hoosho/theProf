@@ -1,0 +1,110 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>لوحة الطالب</title>
+  <link rel="stylesheet" href="../public/css/main.css">
+  <style>
+    body {
+      background-color: #1a202c;
+      color: white;
+      font-family: 'Cairo', sans-serif;
+      margin: 0;
+      padding: 0;
+    }
+    .dashboard {
+      max-width: 900px;
+      margin: auto;
+      padding: 40px 20px;
+    }
+    h2 {
+      color: #ffcc00;
+      margin-bottom: 30px;
+      text-align: center;
+      font-size: 28px;
+    }
+    .student-info {
+      margin-bottom: 30px;
+      background-color: #2d3748;
+      padding: 20px;
+      border-radius: 12px;
+      box-shadow: 0 0 10px rgba(0, 0, 0, 0.3);
+    }
+    .months, .lessons {
+      display: grid;
+      grid-template-columns: 1fr;
+      gap: 20px;
+    }
+    .month, .lesson {
+      background-color: #4a5568;
+      padding: 20px;
+      border-radius: 10px;
+      transition: transform 0.2s;
+    }
+    .month:hover, .lesson:hover {
+      transform: translateY(-3px);
+    }
+    .month-title {
+      font-weight: bold;
+      color: #ffcc00;
+      margin-bottom: 10px;
+      font-size: 20px;
+    }
+    .lesson-title {
+      font-size: 18px;
+    }
+    a.lesson-title {
+      color: white;
+      text-decoration: none;
+      display: block;
+    }
+    a.lesson-title:hover {
+      text-decoration: underline;
+    }
+    .locked {
+      opacity: 0.6;
+      cursor: not-allowed;
+    }
+    .subscribe-btn {
+      background-color: #ffcc00;
+      color: black;
+      padding: 10px 20px;
+      border: none;
+      border-radius: 8px;
+      font-size: 16px;
+      cursor: pointer;
+      margin-top: 10px;
+    }
+    .subscribe-btn:hover {
+      background-color: #e6b800;
+    }
+  </style>
+</head>
+<body>
+  <div class="dashboard">
+    <h2>👋 أهلاً بيك يا كريم!</h2>
+
+    <div class="student-info">
+      <p>📚 المرحلة الدراسية: <strong>ثالثة إعدادي</strong></p>
+    </div>
+
+    <div class="months">
+      <!-- مشترك فيه -->
+      <div class="month">
+        <a href="/months/1" style="text-decoration: none; color: inherit;">
+          <p class="month-title">📅 شهر: ابريل</p>
+          <p>💰 السعر: 200 جنيه</p>
+          <p style="color: #90ee90;">✅ تم الاشتراك في هذا الشهر</p>
+        </a>
+      </div>
+
+      <!-- مش مشترك فيه -->
+      <div class="month">
+        <p class="month-title">📅 شهر: مايو</p>
+        <p>💰 السعر: 200 جنيه</p>
+        <button class="subscribe-btn">💳 اشترك في الشهر ده</button>
+      </div>
+    </div>
+</body>
+</html>

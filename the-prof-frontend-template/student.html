@@ -1,0 +1,114 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+  <meta charset="UTF-8">
+  <title>الملف الشخصي للطالب</title>
+  <style>
+    body {
+      background: linear-gradient(to bottom, #1f2937, #111827);
+      color: white;
+      font-family: 'Poppins', sans-serif;
+      margin: 0;
+      padding: 0 15px;
+    }
+
+    .container {
+      max-width: 1000px;
+      margin: auto;
+      padding: 30px 0;
+    }
+
+    h1 {
+      font-size: 32px;
+      margin-bottom: 20px;
+      color: #fbbf24;
+    }
+
+    .month {
+      background-color: #2d3748;
+      border-radius: 10px;
+      padding: 20px;
+      margin-bottom: 25px;
+    }
+
+    .month h2 {
+      margin-bottom: 10px;
+      color: #facc15;
+    }
+
+    .lesson {
+      background-color: #374151;
+      padding: 12px;
+      margin-bottom: 10px;
+      border-radius: 8px;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+    }
+
+    .lesson span {
+      font-size: 16px;
+    }
+
+    .lesson button {
+      padding: 6px 14px;
+      background-color: #fbbf24;
+      border: none;
+      border-radius: 5px;
+      font-weight: bold;
+      cursor: pointer;
+    }
+
+    .progress-bar {
+      background-color: #4b5563;
+      border-radius: 6px;
+      height: 10px;
+      overflow: hidden;
+      margin: 10px 0 15px;
+    }
+
+    .progress {
+      background-color: #f59e0b;
+      height: 100%;
+      width: 40%;
+    }
+  </style>
+</head>
+<body>
+  <div class="container">
+    <h1>👋 أهلاً يا كريم</h1>
+
+    <!-- شهر مايو -->
+    <div class="month">
+      <h2>شهر مايو</h2>
+      <div class="progress-bar">
+        <div class="progress" style="width: 60%;"></div>
+      </div>
+      <div class="lesson">
+        <span>الدرس الأول: مقدمة في الرياضيات</span>
+        <button>ابدأ</button>
+      </div>
+      <div class="lesson">
+        <span>الدرس الثاني: تمارين ومسائل</span>
+        <button>أكمل</button>
+      </div>
+      <div class="lesson">
+        <span>الدرس الثالث: مراجعة</span>
+        <button disabled style="opacity: 0.6;">مقفل</button>
+      </div>
+    </div>
+
+    <!-- شهر أبريل -->
+    <div class="month">
+      <h2>شهر أبريل</h2>
+      <div class="progress-bar">
+        <div class="progress" style="width: 90%;"></div>
+      </div>
+      <div class="lesson">
+        <span>الدرس 1: مراجعة عامة</span>
+        <button>إعادة</button>
+      </div>
+    </div>
+  </div>
+</body>
+</html>

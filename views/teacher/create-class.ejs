@@ -1,0 +1,356 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>إضافة درس جديد</title>
+  <link href="https://fonts.googleapis.com/css2?family=Cairo:wght@400;600;700&display=swap" rel="stylesheet">
+  <style>
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+      font-family: 'Cairo', sans-serif;
+    }
+    
+    body {
+      background: linear-gradient(135deg, #2d3748, #1f2937, #4a5568);
+      color: white;
+      min-height: 100vh;
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
+      align-items: center;
+      padding: 20px;
+    }
+
+    .container {
+      width: 100%;
+      max-width: 1200px;
+      margin: 0 auto;
+      padding: 20px;
+    }
+
+    .form-container {
+      max-width: 500px;
+      background-color: #2d3748;
+      padding: 40px 25px;
+      border-radius: 15px;
+      box-shadow: 0 10px 25px rgba(0,0,0,0.3);
+      margin: auto;
+      border: 1px solid rgba(255,255,255,0.1);
+    }
+
+    .form-container h2 {
+      color: #fbbf24;
+      margin-bottom: 25px;
+      font-family: 'Cairo', sans-serif;
+      text-align: center;
+      font-size: 28px;
+      font-weight: 700;
+    }
+
+    .form-container input,
+    .form-container select,
+    .form-container textarea {
+      width: 100%;
+      padding: 15px;
+      margin-bottom: 20px;
+      border-radius: 8px;
+      border: 1px solid rgba(255,255,255,0.1);
+      font-size: 16px;
+      background-color: #4a5568;
+      color: white;
+      font-family: 'Cairo', sans-serif;
+      transition: all 0.3s ease;
+    }
+
+    .form-container textarea {
+      min-height: 120px;
+      resize: vertical;
+    }
+
+    .form-container input:focus,
+    .form-container select:focus,
+    .form-container textarea:focus {
+      outline: none;
+      border-color: #fbbf24;
+      box-shadow: 0 0 0 2px rgba(251, 191, 36, 0.3);
+    }
+
+    .form-container input::placeholder,
+    .form-container textarea::placeholder {
+      color: #a0aec0;
+    }
+
+    .form-container button {
+      background-color: #fbbf24;
+      color: #1a202c;
+      padding: 15px;
+      width: 100%;
+      border: none;
+      border-radius: 8px;
+      font-size: 18px;
+      cursor: pointer;
+      transition: 0.3s;
+      font-family: 'Cairo', sans-serif;
+      font-weight: bold;
+      box-shadow: 0 4px 6px rgba(0,0,0,0.1);
+    }
+
+    .form-container button:hover {
+      background-color: #f59e0b;
+      transform: translateY(-3px);
+      box-shadow: 0 6px 12px rgba(0,0,0,0.15);
+    }
+
+    .back-link {
+      display: block;
+      text-align: center;
+      margin-top: 20px;
+      color: #a0aec0;
+      text-decoration: none;
+      transition: 0.3s;
+      font-size: 16px;
+    }
+
+    .back-link:hover {
+      color: #fbbf24;
+    }
+
+    .message {
+      margin: 0 0 20px;
+      padding: 15px;
+      border-radius: 8px;
+      display: none;
+      font-size: 16px;
+      font-weight: 600;
+      text-align: center;
+      box-shadow: 0 2px 5px rgba(0,0,0,0.1);
+    }
+
+    .error {
+      background-color: #ffd7d7;
+      color: #c62828;
+      border-right: 4px solid #c62828;
+    }
+
+    .success {
+      background-color: #d4edda;
+      color: #155724;
+      border-right: 4px solid #28a745;
+    }
+
+    .form-group {
+      margin-bottom: 20px;
+    }
+
+    .form-group label {
+      display: block;
+      margin-bottom: 8px;
+      font-weight: 600;
+      color: #e2e8f0;
+    }
+
+    .form-row {
+      display: flex;
+      gap: 15px;
+      margin-bottom: 20px;
+    }
+
+    .form-row > div {
+      flex: 1;
+    }
+
+    @media (max-width: 480px) {
+      .form-container {
+        padding: 30px 20px;
+      }
+
+      .form-container h2 {
+        font-size: 24px;
+      }
+
+      .form-container input,
+      .form-container select,
+      .form-container textarea {
+        font-size: 15px;
+      }
+
+      .form-container button {
+        font-size: 16px;
+      }
+
+      .form-row {
+        flex-direction: column;
+        gap: 0;
+      }
+    }
+  </style>
+</head>
+<body>
+  <div class="container">
+    <div class="form-container">
+      <h2>➕ خلينا نضيف درس جديد</h2>
+      <div id="message" class="message"></div>
+      <form id="createClassForm">
+        <div class="form-group">
+          <label for="title">عنوان الدرس</label>
+          <input type="text" id="title" name="title" placeholder="اكتب عنوان الدرس" required>
+        </div>
+
+        <div class="form-row">
+          <div>
+            <label for="id">رقم الدرس</label>
+            <input type="number" min="1" max="30" id="id" name="id" placeholder="الدرس رقم كام؟" required>
+          </div>
+          <div>
+            <label for="grade">المرحلة الدراسية</label>
+            <select id="grade" name="grade" required>
+              <option disabled selected>اختر المرحلة</option>
+              <option value="1">أولى إعدادي</option>
+              <option value="2">ثانية إعدادي</option>
+              <option value="3">ثالثة إعدادي</option>
+              <option value="4">أولى ثانوي</option>
+              <option value="5">ثانية ثانوي</option>
+              <option value="6">ثالثة ثانوي</option>
+            </select>
+          </div>
+        </div>
+
+        <div class="form-group">
+          <label for="description">وصف الدرس</label>
+          <textarea id="description" name="description" placeholder="اكتب وصف للدرس" required></textarea>
+        </div>
+
+        <div class="form-group">
+          <label for="monthId">الشهر</label>
+          <select id="monthId" name="monthId" required>
+            <option disabled selected>اختار الشهر</option>
+            <!-- سيتم ملء هذه القائمة ديناميكيًا -->
+          </select>
+        </div>
+
+        <div class="form-group">
+          <label for="url">رابط الفيديو</label>
+          <input type="text" id="url" name="url" placeholder="رابط الفيديو" required>
+        </div>
+
+        <div class="form-row">
+          <div>
+            <label for="pdf">رابط ملف PDF</label>
+            <input type="text" id="pdf" name="pdf" placeholder="رابط ملف PDF">
+          </div>
+          <div>
+            <label for="exams">رابط الامتحانات</label>
+            <input type="text" id="exams" name="exams" placeholder="رابط الامتحانات">
+          </div>
+        </div>
+
+        <button type="submit">إضافة الدرس 📝</button>
+      </form>
+      <a href="/teacher/dashboard" class="back-link">العودة للوحة التحكم</a>
+    </div>
+  </div>
+  
+  <script>
+    // دالة لعرض رسائل الخطأ أو النجاح
+    function showMessage(message, type) {
+      const messageElement = document.getElementById('message');
+      messageElement.textContent = message;
+      messageElement.style.display = 'block';
+      
+      // إزالة جميع الفئات
+      messageElement.classList.remove('error', 'success');
+      
+      // إضافة الفئة المناسبة
+      if (type === 'error') {
+        messageElement.classList.add('error');
+      } else if (type === 'success') {
+        messageElement.classList.add('success');
+      }
+    }
+
+    // جلب الشهور المتاحة من المعلم
+    async function fetchMonths() {
+      try {
+        const response = await fetch('/teacher/months');
+        const data = await response.json();
+        
+        if (response.ok && data.months && data.months.length > 0) {
+          const monthSelect = document.getElementById('monthId');
+          
+          // حذف الخيارات الافتراضية
+          while (monthSelect.options.length > 1) {
+            monthSelect.remove(1);
+          }
+          
+          // إضافة الشهور من قاعدة البيانات
+          data.months.forEach(month => {
+            const option = document.createElement('option');
+            option.value = month.id;
+            option.textContent = month.name;
+            monthSelect.appendChild(option);
+          });
+        } else {
+          showMessage('لا توجد شهور متاحة. يرجى إضافة شهر أولاً.', 'error');
+        }
+      } catch (error) {
+        console.error('Error fetching months:', error);
+        showMessage('حدث خطأ أثناء جلب الشهور', 'error');
+      }
+    }
+
+    // استدعاء دالة جلب الشهور عند تحميل الصفحة
+    document.addEventListener('DOMContentLoaded', fetchMonths);
+
+    document.getElementById('createClassForm').addEventListener('submit', async function(e) {
+      e.preventDefault();
+      
+      const formData = {
+        title: document.getElementById('title').value,
+        id: parseInt(document.getElementById('id').value),
+        description: document.getElementById('description').value,
+        grade: parseInt(document.getElementById('grade').value),
+        monthId: parseInt(document.getElementById('monthId').value),
+        url: document.getElementById('url').value,
+        pdf: document.getElementById('pdf').value || '',
+        exams: document.getElementById('exams').value || ''
+      };
+      
+      // التحقق من البيانات
+      if (!formData.title || !formData.description || isNaN(formData.grade) || isNaN(formData.monthId) || !formData.url) {
+        showMessage('يرجى إدخال جميع البيانات الأساسية بشكل صحيح', 'error');
+        return;
+      }
+      
+      try {
+        // إظهار رسالة التحميل
+        showMessage('جاري إضافة الدرس...', '');
+        
+        const response = await fetch('/teacher/create-class', {
+          method: 'POST',
+          headers: {
+            'Content-Type': 'application/json'
+          },
+          body: JSON.stringify(formData)
+        });
+        
+        const data = await response.json();
+        
+        if (response.ok) {
+          showMessage('تم إضافة الدرس بنجاح! 🎉', 'success');
+          setTimeout(() => {
+            window.location.href = '/teacher/dashboard';
+          }, 2000);
+        } else {
+          showMessage(data.errorMessage || 'حدث خطأ أثناء إضافة الدرس', 'error');
+        }
+      } catch (error) {
+        console.error('Error:', error);
+        showMessage('حدث خطأ أثناء الاتصال بالخادم', 'error');
+      }
+    });
+  </script>
+</body>
+</html>

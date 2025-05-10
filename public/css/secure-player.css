@@ -1,0 +1,102 @@
+/**
+ * أنماط مشغل الفيديو الآمن
+ */
+
+.secure-player-container {
+  position: relative;
+  padding-bottom: 56.25%; /* نسبة العرض إلى الارتفاع 16:9 */
+  height: 0;
+  overflow: hidden;
+  background-color: #000;
+  border-radius: 8px;
+}
+
+.secure-player-loading {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  background-color: rgba(0, 0, 0, 0.8);
+  color: white;
+  z-index: 20;
+}
+
+.secure-player-loading p {
+  margin-top: 15px;
+  font-size: 16px;
+}
+
+.spinner {
+  width: 50px;
+  height: 50px;
+  border: 5px solid rgba(255, 255, 255, 0.3);
+  border-radius: 50%;
+  border-top-color: #fbbf24;
+  animation: spin 1s ease-in-out infinite;
+}
+
+@keyframes spin {
+  to {
+    transform: rotate(360deg);
+  }
+}
+
+.secure-player-error {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  background-color: rgba(0, 0, 0, 0.8);
+  color: white;
+  z-index: 20;
+}
+
+.secure-player-error p {
+  background-color: rgba(220, 38, 38, 0.8);
+  padding: 15px 20px;
+  border-radius: 8px;
+  font-size: 16px;
+  max-width: 80%;
+  text-align: center;
+}
+
+.secure-player-iframe,
+.secure-player-video {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  border: none;
+}
+
+/* منع تحديد النص في المشغل */
+.secure-player-container {
+  user-select: none;
+  -webkit-user-select: none;
+  -moz-user-select: none;
+  -ms-user-select: none;
+}
+
+/* طبقة الحماية */
+.secure-player-protection {
+  cursor: default;
+}
+
+/* تخصيص شريط التقدم */
+.secure-player-video::-webkit-media-controls-timeline {
+  background-color: rgba(251, 191, 36, 0.5);
+}
+
+.secure-player-video::-webkit-media-controls-panel {
+  background-color: rgba(0, 0, 0, 0.7);
+}

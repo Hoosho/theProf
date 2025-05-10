@@ -1,0 +1,178 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>لوحة الطالب</title>
+  <link href="https://fonts.googleapis.com/css2?family=Cairo:wght@400;600;700&display=swap" rel="stylesheet">
+  <style>
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+    }
+
+    body {
+      background-color: #1a202c;
+      color: white;
+      font-family: 'Cairo', sans-serif;
+      margin: 0;
+      padding: 0;
+    }
+
+    .dashboard {
+      max-width: 900px;
+      margin: auto;
+      padding: 40px 20px;
+    }
+
+    h2 {
+      color: #ffcc00;
+      margin-bottom: 30px;
+      text-align: center;
+      font-size: 28px;
+    }
+
+    .student-info {
+      margin-bottom: 30px;
+      background-color: #2d3748;
+      padding: 20px;
+      border-radius: 12px;
+      box-shadow: 0 0 10px rgba(0, 0, 0, 0.3);
+    }
+
+    .months, .lessons {
+      display: grid;
+      grid-template-columns: 1fr;
+      gap: 20px;
+    }
+
+    .month, .lesson {
+      background-color: #4a5568;
+      padding: 20px;
+      border-radius: 10px;
+      transition: transform 0.2s;
+    }
+
+    .month:hover, .lesson:hover {
+      transform: translateY(-3px);
+    }
+
+    .month-title {
+      font-weight: bold;
+      color: #ffcc00;
+      margin-bottom: 10px;
+      font-size: 20px;
+    }
+
+    .lesson-title {
+      font-size: 18px;
+    }
+
+    a.lesson-title {
+      color: white;
+      text-decoration: none;
+      display: block;
+    }
+
+    a.lesson-title:hover {
+      text-decoration: underline;
+    }
+
+    .locked {
+      opacity: 0.6;
+      cursor: not-allowed;
+    }
+
+    .subscribe-btn {
+      background-color: #ffcc00;
+      color: black;
+      padding: 10px 20px;
+      border: none;
+      border-radius: 8px;
+      font-size: 16px;
+      cursor: pointer;
+      margin-top: 10px;
+    }
+
+    .subscribe-btn:hover {
+      background-color: #e6b800;
+    }
+
+    .logout-btn {
+      display: block;
+      background-color: #ff4d4d;
+      color: white;
+      padding: 10px 20px;
+      border: none;
+      border-radius: 8px;
+      font-size: 16px;
+      cursor: pointer;
+      margin: 30px auto 0;
+      text-align: center;
+      text-decoration: none;
+      width: 200px;
+    }
+
+    .logout-btn:hover {
+      background-color: #e60000;
+    }
+
+    @media (min-width: 768px) {
+      .months {
+        grid-template-columns: repeat(2, 1fr);
+      }
+    }
+  </style>
+</head>
+<body>
+  <div class="dashboard">
+    <h2>👋 أهلاً بيك يا <%= studentName %>!</h2>
+
+    <div class="student-info">
+      <p>📚 المرحلة الدراسية: <strong><%= studentGrade %></strong></p>
+      <p>💰 رصيدك الحالي: <strong><%= studentCash %> جنيه</strong></p>
+    </div>
+
+    <div class="months">
+      <% if (boughtMonths && boughtMonths.length > 0) { %>
+        <% boughtMonths.forEach(month => { %>
+          <!-- مشترك فيه -->
+          <div class="month">
+            <a href="/student/months/<%= month.monthId %>" style="text-decoration: none; color: inherit;">
+              <p class="month-title">📅 شهر: <%= month.name %></p>
+              <p>💰 السعر: <%= month.price %> جنيه</p>
+              <p style="color: #90ee90;">✅ تم الاشتراك في هذا الشهر</p>
+              <p style="font-size: 14px; color: #a0aec0;">
+                تاريخ الشراء: <%= new Date(month.purchaseDate).toLocaleDateString('ar-EG') %>
+              </p>
+            </a>
+          </div>
+        <% }) %>
+      <% } else { %>
+        <div class="month">
+          <p class="month-title">لا توجد شهور مشترك بها حالياً</p>
+        </div>
+      <% } %>
+
+      <% if (availableMonths && availableMonths.length > 0) { %>
+        <% availableMonths.forEach(month => { %>
+          <!-- غير مشترك فيه -->
+          <div class="month">
+            <p class="month-title">📅 شهر: <%= month.name %></p>
+            <p>💰 السعر: <%= month.price %> جنيه</p>
+            <p>📚 السنة الدراسية: <%= month.grade %></p>
+            <button class="subscribe-btn" onclick="location.href='/student/subscribe/<%= month.id %>'">💳 اشترك في الشهر ده</button>
+          </div>
+        <% }) %>
+      <% } %>
+    </div>
+
+    <a href="/auth/logout" class="logout-btn">🚪 تسجيل الخروج</a>
+  </div>
+
+  <script>
+    // يمكن إضافة أي كود JavaScript إضافي هنا
+  </script>
+</body>
+</html>
