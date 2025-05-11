@@ -1,14 +1,12 @@
 {
   "name": "theprofapi",
   "version": "1.0.0",
-  "main": "index.js",
-  "directories": {
-    "doc": "doc"
-  },
+  "main": "app.js",
   "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1",
     "start": "node app.js",
-    "dev": "nodemon app.js"
+    "dev": "nodemon app.js",
+    "deploy": "gh-pages -d public",
+    "test": "echo \"Error: no test specified\" && exit 1"
   },
   "keywords": [],
   "author": "Hoosho",
@@ -22,7 +20,10 @@
     "ejs": "^3.1.10",
     "express": "^5.1.0",
     "jsonwebtoken": "^9.0.2",
-    "mongoose": "^8.14.1",
+    "mongoose": "^8.14.1"
+  },
+  "devDependencies": {
+    "gh-pages": "^6.3.0",
     "nodemon": "^3.1.10"
   }
 }

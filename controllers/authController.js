@@ -33,7 +33,7 @@ module.exports.studentLogin = async (req, res) => {
     // تخزين التوكن في الكوكيز
     res.cookie('accessToken', token, {
       httpOnly: true,
-      secure: process.env.NODE_ENV === 'production', // تأكد من أن الكوكيز فقط تعمل في وضع HTTPS في البيئة الانتاج
+      secure: false, // تم تعيين القيمة مباشرة بدلاً من process.env.NODE_ENV === 'production'
       maxAge: 3600000, // ساعة واحدة
       sameSite: 'Lax',
     });
@@ -72,7 +72,7 @@ module.exports.getTestIds = async (req, res) => {
 
 // دالة لتوليد التوكن
 const generateToken = (id, role) => {
-  return jwt.sign({ id, role }, process.env.SECRET_KEY, {
+  return jwt.sign({ id, role }, 'secretKeyForJWT404', { // تم تعيين القيمة مباشرة بدلاً من process.env.SECRET_KEY
     expiresIn: '2h',
   });
 };
