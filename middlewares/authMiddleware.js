@@ -13,7 +13,7 @@ exports.protect = (req, res, next) => {
 
   try {
     // فك التوكن والتحقق منه
-    const decoded = jwt.verify(token, 'secretKeyForJWT404'); // تم تعيين القيمة مباشرة بدلاً من process.env.SECRET_KEY
+    const decoded = jwt.verify(token, process.env.SECRET_KEY);
     req.user = decoded; // وضع معلومات المستخدم في الريكويست
     next();
   } catch (err) {

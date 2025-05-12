@@ -31,6 +31,10 @@ const studentSchema = new mongoose.Schema({
     default : Date.now
   },
   watchedClasses: [String],
+  role : {
+    type : String,
+    default : 'student'
+  }
 });
 
 module.exports = mongoose.model("Student", studentSchema);

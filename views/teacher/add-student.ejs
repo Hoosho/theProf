@@ -195,12 +195,18 @@
       <form id="addStudentForm">
         <div class="form-group">
           <label for="studentName"><span class="emoji">👤</span> اسم الطالب</label>
-          <input type="text" id="studentName" name="studentName" placeholder="أدخل اسم الطالب بالكامل" required>
+          <input type="text" id="studentName" name="studentName" placeholder="أدخل اسم الطالب بالكامل"
+                 minlength="3" maxlength="50" pattern="^[\u0600-\u06FF\s]+$"
+                 title="يجب أن يحتوي الاسم على حروف عربية فقط (3-50 حرف)" required>
+          <small style="color: #a0aec0; display: block; margin-top: 5px;">* يجب أن يحتوي على حروف عربية فقط (3-50 حرف)</small>
         </div>
 
         <div class="form-group">
           <label for="studentNumber"><span class="emoji">📱</span> رقم هاتف الطالب</label>
-          <input type="text" id="studentNumber" name="studentNumber" placeholder="أدخل رقم هاتف الطالب" required>
+          <input type="text" id="studentNumber" name="studentNumber" placeholder="أدخل رقم هاتف الطالب"
+                 pattern="[0-9]+" minlength="11" maxlength="11"
+                 title="يجب أن يحتوي رقم الهاتف على 11 رقم فقط" required>
+          <small style="color: #a0aec0; display: block; margin-top: 5px;">* يجب أن يحتوي على 11 رقم فقط</small>
         </div>
 
         <div class="form-group">
@@ -256,6 +262,32 @@
       // التحقق من البيانات
       if (!formData.studentName || !formData.studentNumber || !formData.studentGrade) {
         showMessage('يرجى إدخال جميع البيانات بشكل صحيح', 'error');
+        return;
+      }
+
+      // التحقق من اسم الطالب (حروف عربية فقط)
+      const nameRegex = /^[\u0600-\u06FF\s]+$/;
+      if (!nameRegex.test(formData.studentName)) {
+        showMessage('يجب أن يحتوي اسم الطالب على حروف عربية فقط', 'error');
+        return;
+      }
+
+      // التحقق من طول اسم الطالب
+      if (formData.studentName.length < 3 || formData.studentName.length > 50) {
+        showMessage('يجب أن يكون طول اسم الطالب بين 3 و 50 حرف', 'error');
+        return;
+      }
+
+      // التحقق من رقم الهاتف (أرقام فقط)
+      const phoneRegex = /^[0-9]+$/;
+      if (!phoneRegex.test(formData.studentNumber)) {
+        showMessage('يجب أن يحتوي رقم الهاتف على أرقام فقط', 'error');
+        return;
+      }
+
+      // التحقق من طول رقم الهاتف
+      if (formData.studentNumber.length !== 11) {
+        showMessage('يجب أن يكون طول رقم الهاتف 11 رقم', 'error');
         return;
       }
 

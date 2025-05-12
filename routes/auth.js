@@ -1,15 +1,12 @@
 // routes/auth.js
 const express = require('express');
 const router = express.Router();
-const { renderLoginPage, studentLogin, getTestIds } = require('../controllers/authController');
+const { renderLoginPage, login } = require('../controllers/authController');
 
 // تحديد المسارات بشكل صحيح
 router.route('/login')
     .get(renderLoginPage)
-    .post(studentLogin);
-
-// مسار لجلب أكواد الاختبار
-router.get('/test-ids', getTestIds);
+    .post(login);
 
 // مسار لتسجيل الخروج
 router.get('/logout', (req, res) => {

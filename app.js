@@ -8,7 +8,7 @@ const mongoose = require('mongoose');
 const ConnectToDB = require('./Config/db');
 const Student = require('./models/Student');
 const Teacher = require('./models/Teacher');
-// require('dotenv').config(); // معطل مؤقتاً
+require('dotenv').config();
 
 // اتصال بقاعدة البيانات
 ConnectToDB();
@@ -72,7 +72,7 @@ app.use((req, res) => {
 });
 
 // تشغيل السيرفر
-const PORT = 5000; // تم تعيين القيمة مباشرة بدلاً من process.env.PORT
+const PORT = process.env.PORT || 5000;
 app.listen(PORT, () => {
   console.log(`Server running on port ${PORT}`);
 });

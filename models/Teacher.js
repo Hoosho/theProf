@@ -43,10 +43,11 @@ const teacherSchema = new mongoose.Schema({
     availableClasses: { 
         type: [classSchema], 
         default: [] 
-
+    },
+    role : {
+        type : String,
+        default : 'teacher'
     }
-  });
-  
-  
+});
 // Export The Models
 module.exports = mongoose.model("Teacher", teacherSchema);

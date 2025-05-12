@@ -8,24 +8,27 @@ module.exports.renderLoginPage = (req, res) => {
 };
 
 // تسجيل الدخول للطلاب أو المعلمين
-module.exports.studentLogin = async (req, res) => {
+module.exports.login = async (req, res) => {
   try {
-    const { code, role } = req.body;
+    const { code } = req.body;
 
-    // تحقق من أن الدور المدخل صحيح
-    if (role !== 'student' && role !== 'teacher') {
-      return res.status(400).json({ errorMessage: 'Invalid role provided!' });
+    if (!code) {
+      return res.status(400).json({ errorMessage: 'يرجى إدخال الكود!' });
     }
 
-    let user;
-    if (role === 'student') {
-      user = await Student.findById(code);
-      if (!user) return res.status(404).json({ errorMessage: 'Student not found!' });
-    }
+    // البحث عن الطالب أولاً
+    let user = await Student.findById(code);
+    let role = 'student';
 
-    if (role === 'teacher') {
+    // إذا لم يتم العثور على طالب، ابحث عن معلم
+    if (!user) {
       user = await Teacher.findById(code);
-      if (!user) return res.status(404).json({ errorMessage: 'Teacher not found!' });
+      role = 'teacher';
+
+      // إذا لم يتم العثور على معلم أيضاً
+      if (!user) {
+        return res.status(404).json({ errorMessage: 'الكود غير صحيح. يرجى التأكد من الكود والمحاولة مرة أخرى.' });
+      }
     }
 
     const token = generateToken(user._id, role);
@@ -33,8 +36,8 @@ module.exports.studentLogin = async (req, res) => {
     // تخزين التوكن في الكوكيز
     res.cookie('accessToken', token, {
       httpOnly: true,
-      secure: false, // تم تعيين القيمة مباشرة بدلاً من process.env.NODE_ENV === 'production'
-      maxAge: 3600000, // ساعة واحدة
+      secure: process.env.NODE_ENV === 'production',
+      maxAge: 14 * 24 * 60 * 60 * 1000, // أسبوعين بالمللي ثانية
       sameSite: 'Lax',
     });
 
@@ -46,33 +49,15 @@ module.exports.studentLogin = async (req, res) => {
     });
   } catch (err) {
     console.error(err);
-    return res.status(500).json({ errorMessage: 'Internal Server Error!' });
+    return res.status(500).json({ errorMessage: 'حدث خطأ في الخادم. يرجى المحاولة مرة أخرى.' });
   }
 };
 
-// دالة لجلب أكواد الاختبار
-module.exports.getTestIds = async (req, res) => {
-  try {
-    // جلب أول طالبين
-    const students = await Student.find().limit(2);
-
-    // جلب أول معلم
-    const teacher = await Teacher.findOne();
-
-    return res.status(200).json({
-      student1Id: students[0] ? students[0]._id : null,
-      student2Id: students[1] ? students[1]._id : null,
-      teacherId: teacher ? teacher._id : null
-    });
-  } catch (err) {
-    console.error('خطأ في جلب أكواد الاختبار:', err);
-    return res.status(500).json({ errorMessage: 'Internal Server Error!' });
-  }
-};
+// تم حذف دالة جلب أكواد الاختبار
 
 // دالة لتوليد التوكن
 const generateToken = (id, role) => {
-  return jwt.sign({ id, role }, 'secretKeyForJWT404', { // تم تعيين القيمة مباشرة بدلاً من process.env.SECRET_KEY
-    expiresIn: '2h',
+  return jwt.sign({ id, role }, process.env.SECRET_KEY, {
+    expiresIn: process.env.JWT_EXPIRATION_TIME || '14d', // تعديل وقت انتهاء الصلاحية ليكون أسبوعين
   });
 };

@@ -1,0 +1,742 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>إدارة الطلاب</title>
+  <link href="https://fonts.googleapis.com/css2?family=Cairo:wght@400;600;700&display=swap" rel="stylesheet">
+  <style>
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+      font-family: 'Cairo', sans-serif;
+    }
+
+    body {
+      background: linear-gradient(135deg, #1a202c, #2d3748);
+      color: white;
+      min-height: 100vh;
+    }
+
+    .container {
+      max-width: 1200px;
+      margin: 0 auto;
+      padding: 40px 20px;
+    }
+
+    header {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      margin-bottom: 30px;
+      background-color: rgba(45, 55, 72, 0.8);
+      padding: 15px 25px;
+      border-radius: 12px;
+      box-shadow: 0 4px 15px rgba(0, 0, 0, 0.2);
+      flex-wrap: wrap;
+      gap: 15px;
+    }
+
+    @media (max-width: 600px) {
+      header {
+        justify-content: center;
+        text-align: center;
+      }
+    }
+
+    h1 {
+      color: #fbbf24;
+      font-size: 28px;
+    }
+
+    .back-btn {
+      background-color: #4a5568;
+      color: white;
+      padding: 10px 20px;
+      border-radius: 8px;
+      text-decoration: none;
+      transition: all 0.3s ease;
+      font-weight: 600;
+      display: inline-flex;
+      align-items: center;
+    }
+
+    .back-btn:hover {
+      background-color: #718096;
+      transform: translateY(-3px);
+    }
+
+    .search-bar {
+      margin-bottom: 20px;
+      display: flex;
+      gap: 10px;
+      flex-wrap: wrap;
+    }
+
+    .search-bar input {
+      flex: 1;
+      padding: 12px 15px;
+      border-radius: 8px;
+      border: 1px solid rgba(255, 255, 255, 0.1);
+      background-color: #4a5568;
+      color: white;
+      font-size: 16px;
+    }
+
+    .search-bar input:focus {
+      outline: none;
+      border-color: #fbbf24;
+    }
+
+    .students-container {
+      display: grid;
+      grid-template-columns: 1fr;
+      gap: 20px;
+    }
+
+    @media (min-width: 768px) {
+      .students-container {
+        grid-template-columns: repeat(2, 1fr);
+      }
+    }
+
+    @media (min-width: 1024px) {
+      .students-container {
+        grid-template-columns: repeat(3, 1fr);
+      }
+    }
+
+    .student-card {
+      background-color: rgba(45, 55, 72, 0.8);
+      border-radius: 12px;
+      padding: 20px;
+      box-shadow: 0 4px 15px rgba(0, 0, 0, 0.2);
+      transition: transform 0.3s ease;
+      position: relative;
+    }
+
+    .student-card:hover {
+      transform: translateY(-5px);
+    }
+
+    .student-name {
+      font-size: 22px;
+      color: #fbbf24;
+      margin-bottom: 10px;
+    }
+
+    .student-info {
+      margin-bottom: 15px;
+    }
+
+    .student-info p {
+      margin-bottom: 5px;
+      display: flex;
+      align-items: center;
+    }
+
+    .student-info p span {
+      margin-right: 10px;
+      color: #a0aec0;
+    }
+
+    .student-actions {
+      display: flex;
+      gap: 10px;
+      margin-top: 15px;
+      flex-wrap: wrap;
+    }
+
+    .action-btn {
+      padding: 8px 15px;
+      border-radius: 6px;
+      border: none;
+      cursor: pointer;
+      font-weight: 600;
+      transition: all 0.3s ease;
+      font-family: 'Cairo', sans-serif;
+      margin-bottom: 5px;
+    }
+
+    @media (max-width: 480px) {
+      .action-btn {
+        flex: 1;
+        text-align: center;
+      }
+    }
+
+    .edit-btn {
+      background-color: #3182ce;
+      color: white;
+    }
+
+    .edit-btn:hover {
+      background-color: #2c5282;
+    }
+
+    .delete-btn {
+      background-color: #e53e3e;
+      color: white;
+    }
+
+    .delete-btn:hover {
+      background-color: #c53030;
+    }
+
+    .add-cash-btn {
+      background-color: #38a169;
+      color: white;
+    }
+
+    .add-cash-btn:hover {
+      background-color: #2f855a;
+    }
+
+    .student-id {
+      position: absolute;
+      top: 15px;
+      left: 15px;
+      background-color: rgba(26, 32, 44, 0.7);
+      color: #a0aec0;
+      padding: 5px 10px;
+      border-radius: 20px;
+      font-size: 12px;
+    }
+
+    .modal {
+      display: none;
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      background-color: rgba(0, 0, 0, 0.7);
+      z-index: 1000;
+      justify-content: center;
+      align-items: center;
+    }
+
+    .modal-content {
+      background-color: #2d3748;
+      padding: 30px;
+      border-radius: 12px;
+      width: 90%;
+      max-width: 500px;
+      box-shadow: 0 5px 20px rgba(0, 0, 0, 0.3);
+      position: relative;
+      max-height: 90vh;
+      overflow-y: auto;
+    }
+
+    @media (max-width: 600px) {
+      .modal-content {
+        padding: 20px 15px;
+        width: 95%;
+      }
+    }
+
+    .close-modal {
+      position: absolute;
+      top: 15px;
+      right: 15px;
+      font-size: 24px;
+      cursor: pointer;
+      color: #a0aec0;
+    }
+
+    .modal-title {
+      color: #fbbf24;
+      margin-bottom: 20px;
+      font-size: 24px;
+    }
+
+    .form-group {
+      margin-bottom: 15px;
+    }
+
+    .form-group label {
+      display: block;
+      margin-bottom: 8px;
+      color: #e2e8f0;
+    }
+
+    .form-group input, .form-group select, .form-group textarea {
+      width: 100%;
+      padding: 12px;
+      border-radius: 8px;
+      border: 1px solid rgba(255, 255, 255, 0.1);
+      background-color: #4a5568;
+      color: white;
+      font-size: 16px;
+    }
+
+    .form-group textarea {
+      min-height: 100px;
+      resize: vertical;
+    }
+
+    .form-group input:focus, .form-group select:focus {
+      outline: none;
+      border-color: #fbbf24;
+    }
+
+    .submit-btn {
+      background-color: #fbbf24;
+      color: #1a202c;
+      padding: 12px 20px;
+      border: none;
+      border-radius: 8px;
+      font-size: 16px;
+      cursor: pointer;
+      width: 100%;
+      margin-top: 10px;
+      font-weight: 600;
+      transition: all 0.3s ease;
+    }
+
+    .submit-btn:hover {
+      background-color: #f59e0b;
+    }
+
+    .message {
+      padding: 10px 15px;
+      border-radius: 8px;
+      margin-bottom: 15px;
+      display: none;
+    }
+
+    .success {
+      background-color: rgba(56, 161, 105, 0.2);
+      color: #9ae6b4;
+      border: 1px solid #38a169;
+    }
+
+    .error {
+      background-color: rgba(229, 62, 62, 0.2);
+      color: #feb2b2;
+      border: 1px solid #e53e3e;
+    }
+
+    .no-students {
+      text-align: center;
+      padding: 40px;
+      background-color: rgba(45, 55, 72, 0.8);
+      border-radius: 12px;
+      color: #a0aec0;
+    }
+
+    @media (min-width: 768px) {
+      .students-container {
+        grid-template-columns: repeat(2, 1fr);
+      }
+    }
+
+    @media (min-width: 1024px) {
+      .students-container {
+        grid-template-columns: repeat(3, 1fr);
+      }
+    }
+  </style>
+</head>
+<body>
+  <div class="container">
+    <header>
+      <h1>إدارة الطلاب</h1>
+      <a href="/teacher/dashboard" class="back-btn">العودة للوحة التحكم</a>
+    </header>
+
+    <div class="search-bar">
+      <input type="text" id="searchInput" placeholder="ابحث عن طالب بالاسم أو رقم الهاتف...">
+    </div>
+
+    <div id="message" class="message"></div>
+
+    <div id="studentsContainer" class="students-container">
+      <!-- سيتم إضافة بطاقات الطلاب هنا بواسطة JavaScript -->
+      <div class="no-students" id="noStudents" style="display: none;">
+        <h3>لا يوجد طلاب حالياً</h3>
+        <p>قم بإضافة طلاب جدد من خلال صفحة إضافة طالب جديد</p>
+      </div>
+    </div>
+  </div>
+
+  <!-- نافذة تعديل بيانات الطالب -->
+  <div id="editModal" class="modal">
+    <div class="modal-content">
+      <span class="close-modal" id="closeEditModal">&times;</span>
+      <h2 class="modal-title">تعديل بيانات الطالب</h2>
+      <div id="editMessage" class="message"></div>
+      <form id="editStudentForm">
+        <input type="hidden" id="editStudentId">
+        <div class="form-group">
+          <label for="editStudentName">اسم الطالب</label>
+          <input type="text" id="editStudentName" required>
+        </div>
+        <div class="form-group">
+          <label for="editStudentNumber">رقم هاتف الطالب</label>
+          <input type="text" id="editStudentNumber" required>
+        </div>
+        <div class="form-group">
+          <label for="editStudentGrade">المرحلة الدراسية</label>
+          <select id="editStudentGrade" required>
+            <option value="" disabled>اختر المرحلة الدراسية</option>
+            <option value="1prep">أولى إعدادي</option>
+            <option value="2prep">ثانية إعدادي</option>
+            <option value="3prep">ثالثة إعدادي</option>
+            <option value="1high">أولى ثانوي</option>
+            <option value="2high">ثانية ثانوي</option>
+            <option value="3high">ثالثة ثانوي</option>
+          </select>
+        </div>
+        <div class="form-group">
+          <label for="editStudentCash">رصيد الطالب (جنيه)</label>
+          <input type="number" id="editStudentCash" min="0" required>
+        </div>
+        <button type="submit" class="submit-btn">حفظ التغييرات</button>
+      </form>
+    </div>
+  </div>
+
+  <!-- نافذة إضافة رصيد للطالب -->
+  <div id="addCashModal" class="modal">
+    <div class="modal-content">
+      <span class="close-modal" id="closeAddCashModal">&times;</span>
+      <h2 class="modal-title">إضافة رصيد للطالب</h2>
+      <div id="addCashMessage" class="message"></div>
+      <form id="addCashForm">
+        <input type="hidden" id="cashStudentId">
+        <div class="form-group">
+          <label for="studentCurrentCash">الرصيد الحالي</label>
+          <input type="number" id="studentCurrentCash" disabled>
+        </div>
+        <div class="form-group">
+          <label for="cashAmount">المبلغ المراد إضافته (جنيه)</label>
+          <input type="number" id="cashAmount" min="1" required>
+        </div>
+        <button type="submit" class="submit-btn">إضافة الرصيد</button>
+      </form>
+    </div>
+  </div>
+
+  <!-- نافذة تأكيد الحذف -->
+  <div id="deleteModal" class="modal">
+    <div class="modal-content">
+      <span class="close-modal" id="closeDeleteModal">&times;</span>
+      <h2 class="modal-title">تأكيد حذف الطالب</h2>
+      <div id="deleteMessage" class="message"></div>
+      <p style="margin-bottom: 20px;">هل أنت متأكد من حذف الطالب <strong id="deleteStudentName"></strong>؟</p>
+      <p style="margin-bottom: 20px; color: #e53e3e;">هذا الإجراء لا يمكن التراجع عنه!</p>
+      <form id="deleteStudentForm">
+        <input type="hidden" id="deleteStudentId">
+        <button type="submit" class="submit-btn" style="background-color: #e53e3e;">تأكيد الحذف</button>
+        <button type="button" id="cancelDelete" class="submit-btn" style="background-color: #4a5568; margin-top: 10px;">إلغاء</button>
+      </form>
+    </div>
+  </div>
+
+  <script>
+    // سيتم إضافة كود JavaScript هنا
+    document.addEventListener('DOMContentLoaded', function() {
+      // جلب بيانات الطلاب
+      fetchStudents();
+
+      // البحث في الطلاب
+      document.getElementById('searchInput').addEventListener('input', function() {
+        filterStudents(this.value);
+      });
+
+      // إغلاق النوافذ المنبثقة
+      document.getElementById('closeEditModal').addEventListener('click', function() {
+        document.getElementById('editModal').style.display = 'none';
+      });
+
+      document.getElementById('closeAddCashModal').addEventListener('click', function() {
+        document.getElementById('addCashModal').style.display = 'none';
+      });
+
+      document.getElementById('closeDeleteModal').addEventListener('click', function() {
+        document.getElementById('deleteModal').style.display = 'none';
+      });
+
+      document.getElementById('cancelDelete').addEventListener('click', function() {
+        document.getElementById('deleteModal').style.display = 'none';
+      });
+
+      // تقديم نموذج تعديل الطالب
+      document.getElementById('editStudentForm').addEventListener('submit', function(e) {
+        e.preventDefault();
+        updateStudent();
+      });
+
+      // تقديم نموذج إضافة رصيد
+      document.getElementById('addCashForm').addEventListener('submit', function(e) {
+        e.preventDefault();
+        addCash();
+      });
+
+      // تقديم نموذج حذف الطالب
+      document.getElementById('deleteStudentForm').addEventListener('submit', function(e) {
+        e.preventDefault();
+        deleteStudent();
+      });
+    });
+
+    // دالة لجلب بيانات الطلاب
+    async function fetchStudents() {
+      try {
+        const response = await fetch('/teacher/students-data');
+
+        if (!response.ok) {
+          throw new Error(`HTTP error! status: ${response.status}`);
+        }
+
+        const data = await response.json();
+
+        if (data.students && data.students.length > 0) {
+          renderStudents(data.students);
+
+          // التحقق من وجود العنصر قبل تغيير خاصية العرض
+          const noStudentsElement = document.getElementById('noStudents');
+          if (noStudentsElement) {
+            noStudentsElement.style.display = 'none';
+          }
+        } else {
+          const noStudentsElement = document.getElementById('noStudents');
+          if (noStudentsElement) {
+            noStudentsElement.style.display = 'block';
+          } else {
+            // إذا لم يكن العنصر موجودًا، أضف رسالة بديلة
+            const container = document.getElementById('studentsContainer');
+            container.innerHTML = `
+              <div class="no-students">
+                <h3>لا يوجد طلاب حالياً</h3>
+                <p>قم بإضافة طلاب جدد من خلال صفحة إضافة طالب جديد</p>
+              </div>
+            `;
+          }
+        }
+      } catch (error) {
+        console.error('خطأ في جلب بيانات الطلاب:', error);
+        const messageElement = document.getElementById('message');
+        if (messageElement) {
+          messageElement.textContent = 'حدث خطأ أثناء جلب بيانات الطلاب';
+          messageElement.className = 'message error';
+          messageElement.style.display = 'block';
+
+          setTimeout(() => {
+            messageElement.style.display = 'none';
+          }, 5000);
+        }
+      }
+    }
+
+    // دالة لعرض بيانات الطلاب
+    function renderStudents(students) {
+      const container = document.getElementById('studentsContainer');
+      container.innerHTML = '';
+
+      students.forEach(student => {
+        const studentCard = document.createElement('div');
+        studentCard.className = 'student-card';
+        studentCard.dataset.id = student._id;
+        studentCard.dataset.name = student.studentName;
+        studentCard.dataset.number = student.studentNumber;
+        studentCard.dataset.grade = student.studentGrade;
+        studentCard.dataset.cash = student.studentCash;
+
+        // تحويل المرحلة الدراسية إلى نص مفهوم
+        let gradeText = '';
+        switch(student.studentGrade) {
+          case '1prep': gradeText = 'أولى إعدادي'; break;
+          case '2prep': gradeText = 'ثانية إعدادي'; break;
+          case '3prep': gradeText = 'ثالثة إعدادي'; break;
+          case '1high': gradeText = 'أولى ثانوي'; break;
+          case '2high': gradeText = 'ثانية ثانوي'; break;
+          case '3high': gradeText = 'ثالثة ثانوي'; break;
+          default: gradeText = 'غير محدد';
+        }
+
+        studentCard.innerHTML = `
+          <div class="student-id">ID: ${student._id}</div>
+          <h3 class="student-name">${student.studentName}</h3>
+          <div class="student-info">
+            <p><strong>رقم الهاتف:</strong> <span>${student.studentNumber}</span></p>
+            <p><strong>المرحلة الدراسية:</strong> <span>${gradeText}</span></p>
+            <p><strong>الرصيد:</strong> <span>${student.studentCash} جنيه</span></p>
+            <p><strong>عدد الشهور المشتراة:</strong> <span>${student.boughtMonths ? student.boughtMonths.length : 0}</span></p>
+          </div>
+          <div class="student-actions">
+            <button class="action-btn edit-btn" onclick="openEditModal('${student._id}')">تعديل</button>
+            <button class="action-btn add-cash-btn" onclick="openAddCashModal('${student._id}')">إضافة رصيد</button>
+            <button class="action-btn delete-btn" onclick="openDeleteModal('${student._id}')">حذف</button>
+          </div>
+        `;
+
+        container.appendChild(studentCard);
+      });
+    }
+
+    // دالة للبحث في الطلاب
+    function filterStudents(searchTerm) {
+      searchTerm = searchTerm.toLowerCase();
+      const studentCards = document.querySelectorAll('.student-card');
+
+      studentCards.forEach(card => {
+        const name = card.dataset.name.toLowerCase();
+        const number = card.dataset.number.toLowerCase();
+
+        if (name.includes(searchTerm) || number.includes(searchTerm)) {
+          card.style.display = 'block';
+        } else {
+          card.style.display = 'none';
+        }
+      });
+    }
+
+    // دالة لفتح نافذة تعديل الطالب
+    function openEditModal(studentId) {
+      const studentCard = document.querySelector(`.student-card[data-id="${studentId}"]`);
+
+      document.getElementById('editStudentId').value = studentId;
+      document.getElementById('editStudentName').value = studentCard.dataset.name;
+      document.getElementById('editStudentNumber').value = studentCard.dataset.number;
+      document.getElementById('editStudentGrade').value = studentCard.dataset.grade;
+      document.getElementById('editStudentCash').value = studentCard.dataset.cash;
+
+      document.getElementById('editModal').style.display = 'flex';
+    }
+
+    // دالة لفتح نافذة إضافة رصيد
+    function openAddCashModal(studentId) {
+      const studentCard = document.querySelector(`.student-card[data-id="${studentId}"]`);
+
+      document.getElementById('cashStudentId').value = studentId;
+      document.getElementById('studentCurrentCash').value = studentCard.dataset.cash;
+      document.getElementById('cashAmount').value = '';
+
+      document.getElementById('addCashModal').style.display = 'flex';
+    }
+
+    // دالة لفتح نافذة تأكيد الحذف
+    function openDeleteModal(studentId) {
+      const studentCard = document.querySelector(`.student-card[data-id="${studentId}"]`);
+
+      document.getElementById('deleteStudentId').value = studentId;
+      document.getElementById('deleteStudentName').textContent = studentCard.dataset.name;
+
+      document.getElementById('deleteModal').style.display = 'flex';
+    }
+
+    // دالة لتحديث بيانات الطالب
+    async function updateStudent() {
+      const studentId = document.getElementById('editStudentId').value;
+      const studentName = document.getElementById('editStudentName').value;
+      const studentNumber = document.getElementById('editStudentNumber').value;
+      const studentGrade = document.getElementById('editStudentGrade').value;
+      const studentCash = document.getElementById('editStudentCash').value;
+
+      try {
+        const response = await fetch(`/teacher/update-student/${studentId}`, {
+          method: 'PUT',
+          headers: {
+            'Content-Type': 'application/json'
+          },
+          body: JSON.stringify({
+            studentName,
+            studentNumber,
+            studentGrade,
+            studentCash
+          })
+        });
+
+        const data = await response.json();
+
+        if (response.ok) {
+          showMessage(data.message, 'success', 'editMessage');
+          setTimeout(() => {
+            document.getElementById('editModal').style.display = 'none';
+            fetchStudents(); // تحديث قائمة الطلاب
+          }, 1500);
+        } else {
+          showMessage(data.errorMessage, 'error', 'editMessage');
+        }
+      } catch (error) {
+        console.error('خطأ في تحديث بيانات الطالب:', error);
+        showMessage('حدث خطأ أثناء تحديث بيانات الطالب', 'error', 'editMessage');
+      }
+    }
+
+    // دالة لإضافة رصيد للطالب
+    async function addCash() {
+      const studentId = document.getElementById('cashStudentId').value;
+      const amount = document.getElementById('cashAmount').value;
+
+      try {
+        const response = await fetch(`/teacher/add-cash/${studentId}`, {
+          method: 'PUT',
+          headers: {
+            'Content-Type': 'application/json'
+          },
+          body: JSON.stringify({
+            amount: parseInt(amount)
+          })
+        });
+
+        const data = await response.json();
+
+        if (response.ok) {
+          showMessage(data.message, 'success', 'addCashMessage');
+          setTimeout(() => {
+            document.getElementById('addCashModal').style.display = 'none';
+            fetchStudents(); // تحديث قائمة الطلاب
+          }, 1500);
+        } else {
+          showMessage(data.errorMessage, 'error', 'addCashMessage');
+        }
+      } catch (error) {
+        console.error('خطأ في إضافة رصيد للطالب:', error);
+        showMessage('حدث خطأ أثناء إضافة رصيد للطالب', 'error', 'addCashMessage');
+      }
+    }
+
+    // دالة لحذف الطالب
+    async function deleteStudent() {
+      const studentId = document.getElementById('deleteStudentId').value;
+
+      try {
+        const response = await fetch(`/teacher/delete-student/${studentId}`, {
+          method: 'DELETE'
+        });
+
+        const data = await response.json();
+
+        if (response.ok) {
+          showMessage(data.message, 'success', 'deleteMessage');
+          setTimeout(() => {
+            document.getElementById('deleteModal').style.display = 'none';
+            fetchStudents(); // تحديث قائمة الطلاب
+          }, 1500);
+        } else {
+          showMessage(data.errorMessage, 'error', 'deleteMessage');
+        }
+      } catch (error) {
+        console.error('خطأ في حذف الطالب:', error);
+        showMessage('حدث خطأ أثناء حذف الطالب', 'error', 'deleteMessage');
+      }
+    }
+
+    // دالة لعرض الرسائل
+    function showMessage(message, type, elementId) {
+      const messageElement = document.getElementById(elementId);
+      messageElement.textContent = message;
+      messageElement.className = `message ${type}`;
+      messageElement.style.display = 'block';
+
+      setTimeout(() => {
+        messageElement.style.display = 'none';
+      }, 5000);
+    }
+  </script>ذ
+</body>
+</html>

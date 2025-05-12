@@ -1,0 +1,647 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>إدارة الشهور</title>
+  <link href="https://fonts.googleapis.com/css2?family=Cairo:wght@400;600;700&display=swap" rel="stylesheet">
+  <style>
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+      font-family: 'Cairo', sans-serif;
+    }
+
+    body {
+      background: linear-gradient(135deg, #1a202c, #2d3748);
+      color: white;
+      min-height: 100vh;
+    }
+
+    .container {
+      max-width: 1200px;
+      margin: 0 auto;
+      padding: 40px 20px;
+    }
+
+    header {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      margin-bottom: 30px;
+      background-color: rgba(45, 55, 72, 0.8);
+      padding: 15px 25px;
+      border-radius: 12px;
+      box-shadow: 0 4px 15px rgba(0, 0, 0, 0.2);
+    }
+
+    h1 {
+      color: #fbbf24;
+      font-size: 28px;
+    }
+
+    .back-btn {
+      background-color: #4a5568;
+      color: white;
+      padding: 10px 20px;
+      border-radius: 8px;
+      text-decoration: none;
+      transition: all 0.3s ease;
+      font-weight: 600;
+      display: inline-flex;
+      align-items: center;
+    }
+
+    .back-btn:hover {
+      background-color: #718096;
+      transform: translateY(-3px);
+    }
+
+    .add-btn {
+      background-color: #38a169;
+      color: white;
+      padding: 10px 20px;
+      border-radius: 8px;
+      text-decoration: none;
+      transition: all 0.3s ease;
+      font-weight: 600;
+      display: inline-flex;
+      align-items: center;
+      margin-bottom: 20px;
+    }
+
+    .add-btn:hover {
+      background-color: #2f855a;
+      transform: translateY(-3px);
+    }
+
+    .search-bar {
+      margin-bottom: 20px;
+      display: flex;
+      gap: 10px;
+    }
+
+    .search-bar input {
+      flex: 1;
+      padding: 12px 15px;
+      border-radius: 8px;
+      border: 1px solid rgba(255, 255, 255, 0.1);
+      background-color: #4a5568;
+      color: white;
+      font-size: 16px;
+    }
+
+    .search-bar input:focus {
+      outline: none;
+      border-color: #fbbf24;
+    }
+
+    .months-container {
+      display: grid;
+      grid-template-columns: 1fr;
+      gap: 20px;
+    }
+
+    .month-card {
+      background-color: rgba(45, 55, 72, 0.8);
+      border-radius: 12px;
+      padding: 20px;
+      box-shadow: 0 4px 15px rgba(0, 0, 0, 0.2);
+      transition: transform 0.3s ease;
+      position: relative;
+    }
+
+    .month-card:hover {
+      transform: translateY(-5px);
+    }
+
+    .month-name {
+      font-size: 22px;
+      color: #fbbf24;
+      margin-bottom: 10px;
+    }
+
+    .month-info {
+      margin-bottom: 15px;
+    }
+
+    .month-info p {
+      margin-bottom: 5px;
+      display: flex;
+      align-items: center;
+    }
+
+    .month-info p span {
+      margin-right: 10px;
+      color: #a0aec0;
+    }
+
+    .month-actions {
+      display: flex;
+      gap: 10px;
+      margin-top: 15px;
+    }
+
+    .action-btn {
+      padding: 8px 15px;
+      border-radius: 6px;
+      border: none;
+      cursor: pointer;
+      font-weight: 600;
+      transition: all 0.3s ease;
+      font-family: 'Cairo', sans-serif;
+    }
+
+    .edit-btn {
+      background-color: #3182ce;
+      color: white;
+    }
+
+    .edit-btn:hover {
+      background-color: #2c5282;
+    }
+
+    .delete-btn {
+      background-color: #e53e3e;
+      color: white;
+    }
+
+    .delete-btn:hover {
+      background-color: #c53030;
+    }
+
+    .view-classes-btn {
+      background-color: #805ad5;
+      color: white;
+    }
+
+    .view-classes-btn:hover {
+      background-color: #6b46c1;
+    }
+
+    .month-id {
+      position: absolute;
+      top: 15px;
+      left: 15px;
+      background-color: rgba(26, 32, 44, 0.7);
+      color: #a0aec0;
+      padding: 5px 10px;
+      border-radius: 20px;
+      font-size: 12px;
+    }
+
+    .modal {
+      display: none;
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      background-color: rgba(0, 0, 0, 0.7);
+      z-index: 1000;
+      justify-content: center;
+      align-items: center;
+    }
+
+    .modal-content {
+      background-color: #2d3748;
+      padding: 30px;
+      border-radius: 12px;
+      width: 90%;
+      max-width: 500px;
+      box-shadow: 0 5px 20px rgba(0, 0, 0, 0.3);
+      position: relative;
+    }
+
+    .close-modal {
+      position: absolute;
+      top: 15px;
+      right: 15px;
+      font-size: 24px;
+      cursor: pointer;
+      color: #a0aec0;
+    }
+
+    .modal-title {
+      color: #fbbf24;
+      margin-bottom: 20px;
+      font-size: 24px;
+    }
+
+    .form-group {
+      margin-bottom: 15px;
+    }
+
+    .form-group label {
+      display: block;
+      margin-bottom: 8px;
+      color: #e2e8f0;
+    }
+
+    .form-group input, .form-group select {
+      width: 100%;
+      padding: 12px;
+      border-radius: 8px;
+      border: 1px solid rgba(255, 255, 255, 0.1);
+      background-color: #4a5568;
+      color: white;
+      font-size: 16px;
+    }
+
+    .form-group input:focus, .form-group select:focus {
+      outline: none;
+      border-color: #fbbf24;
+    }
+
+    .submit-btn {
+      background-color: #fbbf24;
+      color: #1a202c;
+      padding: 12px 20px;
+      border: none;
+      border-radius: 8px;
+      font-size: 16px;
+      cursor: pointer;
+      width: 100%;
+      margin-top: 10px;
+      font-weight: 600;
+      transition: all 0.3s ease;
+    }
+
+    .submit-btn:hover {
+      background-color: #f59e0b;
+    }
+
+    .message {
+      padding: 10px 15px;
+      border-radius: 8px;
+      margin-bottom: 15px;
+      display: none;
+    }
+
+    .success {
+      background-color: rgba(56, 161, 105, 0.2);
+      color: #9ae6b4;
+      border: 1px solid #38a169;
+    }
+
+    .error {
+      background-color: rgba(229, 62, 62, 0.2);
+      color: #feb2b2;
+      border: 1px solid #e53e3e;
+    }
+
+    .no-months {
+      text-align: center;
+      padding: 40px;
+      background-color: rgba(45, 55, 72, 0.8);
+      border-radius: 12px;
+      color: #a0aec0;
+    }
+
+    .grade-badge {
+      display: inline-block;
+      padding: 5px 10px;
+      border-radius: 20px;
+      font-size: 14px;
+      margin-right: 5px;
+      background-color: #4a5568;
+      color: white;
+    }
+
+    @media (min-width: 768px) {
+      .months-container {
+        grid-template-columns: repeat(2, 1fr);
+      }
+    }
+
+    @media (min-width: 1024px) {
+      .months-container {
+        grid-template-columns: repeat(3, 1fr);
+      }
+    }
+  </style>
+</head>
+<body>
+  <div class="container">
+    <header>
+      <h1>إدارة الشهور</h1>
+      <a href="/teacher/dashboard" class="back-btn">العودة للوحة التحكم</a>
+    </header>
+
+    <a href="/teacher/create-month" class="add-btn">➕ إضافة شهر جديد</a>
+
+    <div class="search-bar">
+      <input type="text" id="searchInput" placeholder="ابحث عن شهر...">
+    </div>
+
+    <div id="message" class="message"></div>
+
+    <div id="monthsContainer" class="months-container">
+      <!-- سيتم إضافة بطاقات الشهور هنا بواسطة JavaScript -->
+      <div class="no-months" id="noMonths" style="display: none;">
+        <h3>لا توجد شهور حالياً</h3>
+        <p>قم بإضافة شهور جديدة من خلال صفحة إضافة شهر جديد</p>
+      </div>
+    </div>
+  </div>
+
+  <!-- نافذة تعديل بيانات الشهر -->
+  <div id="editModal" class="modal">
+    <div class="modal-content">
+      <span class="close-modal" id="closeEditModal">&times;</span>
+      <h2 class="modal-title">تعديل بيانات الشهر</h2>
+      <div id="editMessage" class="message"></div>
+      <form id="editMonthForm">
+        <input type="hidden" id="editMonthId">
+        <div class="form-group">
+          <label for="editMonthName">اسم الشهر</label>
+          <input type="text" id="editMonthName" required>
+        </div>
+        <div class="form-group">
+          <label for="editMonthGrade">المرحلة الدراسية</label>
+          <select id="editMonthGrade" required>
+            <option value="0">جميع المراحل</option>
+            <option value="1">أولى إعدادي</option>
+            <option value="2">ثانية إعدادي</option>
+            <option value="3">ثالثة إعدادي</option>
+            <option value="4">أولى ثانوي</option>
+            <option value="5">ثانية ثانوي</option>
+            <option value="6">ثالثة ثانوي</option>
+          </select>
+        </div>
+        <div class="form-group">
+          <label for="editMonthPrice">سعر الشهر (جنيه)</label>
+          <input type="number" id="editMonthPrice" min="0" required>
+        </div>
+        <button type="submit" class="submit-btn">حفظ التغييرات</button>
+      </form>
+    </div>
+  </div>
+
+  <!-- نافذة تأكيد الحذف -->
+  <div id="deleteModal" class="modal">
+    <div class="modal-content">
+      <span class="close-modal" id="closeDeleteModal">&times;</span>
+      <h2 class="modal-title">تأكيد حذف الشهر</h2>
+      <div id="deleteMessage" class="message"></div>
+      <p style="margin-bottom: 20px;">هل أنت متأكد من حذف شهر <strong id="deleteMonthName"></strong>؟</p>
+      <p style="margin-bottom: 20px; color: #e53e3e;">هذا الإجراء لا يمكن التراجع عنه وسيؤدي إلى حذف جميع الدروس المرتبطة بهذا الشهر!</p>
+      <form id="deleteMonthForm">
+        <input type="hidden" id="deleteMonthId">
+        <button type="submit" class="submit-btn" style="background-color: #e53e3e;">تأكيد الحذف</button>
+        <button type="button" id="cancelDelete" class="submit-btn" style="background-color: #4a5568; margin-top: 10px;">إلغاء</button>
+      </form>
+    </div>
+  </div>
+
+  <script>
+    // سيتم إضافة كود JavaScript هنا
+    document.addEventListener('DOMContentLoaded', function() {
+      // جلب بيانات الشهور
+      fetchMonths();
+
+      // البحث في الشهور
+      document.getElementById('searchInput').addEventListener('input', function() {
+        filterMonths(this.value);
+      });
+
+      // إغلاق النوافذ المنبثقة
+      document.getElementById('closeEditModal').addEventListener('click', function() {
+        document.getElementById('editModal').style.display = 'none';
+      });
+
+      document.getElementById('closeDeleteModal').addEventListener('click', function() {
+        document.getElementById('deleteModal').style.display = 'none';
+      });
+
+      document.getElementById('cancelDelete').addEventListener('click', function() {
+        document.getElementById('deleteModal').style.display = 'none';
+      });
+
+      // تقديم نموذج تعديل الشهر
+      document.getElementById('editMonthForm').addEventListener('submit', function(e) {
+        e.preventDefault();
+        updateMonth();
+      });
+
+      // تقديم نموذج حذف الشهر
+      document.getElementById('deleteMonthForm').addEventListener('submit', function(e) {
+        e.preventDefault();
+        deleteMonth();
+      });
+    });
+
+    // دالة لجلب بيانات الشهور
+    async function fetchMonths() {
+      try {
+        const response = await fetch('/teacher/months-data');
+
+        if (!response.ok) {
+          throw new Error(`HTTP error! status: ${response.status}`);
+        }
+
+        const data = await response.json();
+
+        if (data.months && data.months.length > 0) {
+          renderMonths(data.months);
+
+          // التحقق من وجود العنصر قبل تغيير خاصية العرض
+          const noMonthsElement = document.getElementById('noMonths');
+          if (noMonthsElement) {
+            noMonthsElement.style.display = 'none';
+          }
+        } else {
+          const noMonthsElement = document.getElementById('noMonths');
+          if (noMonthsElement) {
+            noMonthsElement.style.display = 'block';
+          } else {
+            // إذا لم يكن العنصر موجودًا، أضف رسالة بديلة
+            const container = document.getElementById('monthsContainer');
+            container.innerHTML = `
+              <div class="no-months">
+                <h3>لا توجد شهور حالياً</h3>
+                <p>قم بإضافة شهور جديدة من خلال صفحة إضافة شهر جديد</p>
+              </div>
+            `;
+          }
+        }
+      } catch (error) {
+        console.error('خطأ في جلب بيانات الشهور:', error);
+        const messageElement = document.getElementById('message');
+        if (messageElement) {
+          messageElement.textContent = 'حدث خطأ أثناء جلب بيانات الشهور';
+          messageElement.className = 'message error';
+          messageElement.style.display = 'block';
+
+          setTimeout(() => {
+            messageElement.style.display = 'none';
+          }, 5000);
+        }
+      }
+    }
+
+    // دالة لعرض بيانات الشهور
+    function renderMonths(months) {
+      const container = document.getElementById('monthsContainer');
+      container.innerHTML = '';
+
+      months.forEach(month => {
+        const monthCard = document.createElement('div');
+        monthCard.className = 'month-card';
+        monthCard.dataset.id = month.id;
+        monthCard.dataset.name = month.name;
+        monthCard.dataset.grade = month.grade;
+        monthCard.dataset.price = month.pricOfMonth;
+
+        // تحويل المرحلة الدراسية إلى نص مفهوم
+        let gradeText = '';
+        switch(parseInt(month.grade)) {
+          case 0: gradeText = 'جميع المراحل'; break;
+          case 1: gradeText = 'أولى إعدادي'; break;
+          case 2: gradeText = 'ثانية إعدادي'; break;
+          case 3: gradeText = 'ثالثة إعدادي'; break;
+          case 4: gradeText = 'أولى ثانوي'; break;
+          case 5: gradeText = 'ثانية ثانوي'; break;
+          case 6: gradeText = 'ثالثة ثانوي'; break;
+          default: gradeText = 'غير محدد';
+        }
+
+        monthCard.innerHTML = `
+          <div class="month-id">ID: ${month.id}</div>
+          <h3 class="month-name">📅 ${month.name}</h3>
+          <div class="month-info">
+            <p><strong>المرحلة الدراسية:</strong> <span class="grade-badge">${gradeText}</span></p>
+            <p><strong>السعر:</strong> <span>${month.pricOfMonth} جنيه</span></p>
+          </div>
+          <div class="month-actions">
+            <button class="action-btn edit-btn" onclick="openEditModal(${month.id})">تعديل</button>
+            <button class="action-btn view-classes-btn" onclick="viewClasses(${month.id})">عرض الدروس</button>
+            <button class="action-btn delete-btn" onclick="openDeleteModal(${month.id})">حذف</button>
+          </div>
+        `;
+
+        container.appendChild(monthCard);
+      });
+    }
+
+    // دالة للبحث في الشهور
+    function filterMonths(searchTerm) {
+      searchTerm = searchTerm.toLowerCase();
+      const monthCards = document.querySelectorAll('.month-card');
+
+      monthCards.forEach(card => {
+        const name = card.dataset.name.toLowerCase();
+
+        if (name.includes(searchTerm)) {
+          card.style.display = 'block';
+        } else {
+          card.style.display = 'none';
+        }
+      });
+    }
+
+    // دالة لفتح نافذة تعديل الشهر
+    function openEditModal(monthId) {
+      const monthCard = document.querySelector(`.month-card[data-id="${monthId}"]`);
+
+      document.getElementById('editMonthId').value = monthId;
+      document.getElementById('editMonthName').value = monthCard.dataset.name;
+      document.getElementById('editMonthGrade').value = monthCard.dataset.grade;
+      document.getElementById('editMonthPrice').value = monthCard.dataset.price;
+
+      document.getElementById('editModal').style.display = 'flex';
+    }
+
+    // دالة لفتح نافذة تأكيد الحذف
+    function openDeleteModal(monthId) {
+      const monthCard = document.querySelector(`.month-card[data-id="${monthId}"]`);
+
+      document.getElementById('deleteMonthId').value = monthId;
+      document.getElementById('deleteMonthName').textContent = monthCard.dataset.name;
+
+      document.getElementById('deleteModal').style.display = 'flex';
+    }
+
+    // دالة لعرض دروس الشهر
+    function viewClasses(monthId) {
+      window.location.href = `/teacher/classes-list?monthId=${monthId}`;
+    }
+
+    // دالة لتحديث بيانات الشهر
+    async function updateMonth() {
+      const monthId = document.getElementById('editMonthId').value;
+      const name = document.getElementById('editMonthName').value;
+      const grade = document.getElementById('editMonthGrade').value;
+      const price = document.getElementById('editMonthPrice').value;
+
+      try {
+        const response = await fetch(`/teacher/update-month/${monthId}`, {
+          method: 'PUT',
+          headers: {
+            'Content-Type': 'application/json'
+          },
+          body: JSON.stringify({
+            name,
+            grade: parseInt(grade),
+            price: parseInt(price)
+          })
+        });
+
+        const data = await response.json();
+
+        if (response.ok) {
+          showMessage(data.message, 'success', 'editMessage');
+          setTimeout(() => {
+            document.getElementById('editModal').style.display = 'none';
+            fetchMonths(); // تحديث قائمة الشهور
+          }, 1500);
+        } else {
+          showMessage(data.errorMessage, 'error', 'editMessage');
+        }
+      } catch (error) {
+        console.error('خطأ في تحديث بيانات الشهر:', error);
+        showMessage('حدث خطأ أثناء تحديث بيانات الشهر', 'error', 'editMessage');
+      }
+    }
+
+    // دالة لحذف الشهر
+    async function deleteMonth() {
+      const monthId = document.getElementById('deleteMonthId').value;
+
+      try {
+        const response = await fetch(`/teacher/delete-month/${monthId}`, {
+          method: 'DELETE'
+        });
+
+        const data = await response.json();
+
+        if (response.ok) {
+          showMessage(data.message, 'success', 'deleteMessage');
+          setTimeout(() => {
+            document.getElementById('deleteModal').style.display = 'none';
+            fetchMonths(); // تحديث قائمة الشهور
+          }, 1500);
+        } else {
+          showMessage(data.errorMessage, 'error', 'deleteMessage');
+        }
+      } catch (error) {
+        console.error('خطأ في حذف الشهر:', error);
+        showMessage('حدث خطأ أثناء حذف الشهر', 'error', 'deleteMessage');
+      }
+    }
+
+    // دالة لعرض الرسائل
+    function showMessage(message, type, elementId) {
+      const messageElement = document.getElementById(elementId);
+      messageElement.textContent = message;
+      messageElement.className = `message ${type}`;
+      messageElement.style.display = 'block';
+
+      setTimeout(() => {
+        messageElement.style.display = 'none';
+      }, 5000);
+    }
+  </script>
+</body>
+</html>

@@ -1,0 +1,786 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>إدارة الدروس</title>
+  <link href="https://fonts.googleapis.com/css2?family=Cairo:wght@400;600;700&display=swap" rel="stylesheet">
+  <style>
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+      font-family: 'Cairo', sans-serif;
+    }
+
+    body {
+      background: linear-gradient(135deg, #1a202c, #2d3748);
+      color: white;
+      min-height: 100vh;
+    }
+
+    .container {
+      max-width: 1200px;
+      margin: 0 auto;
+      padding: 40px 20px;
+    }
+
+    header {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      margin-bottom: 30px;
+      background-color: rgba(45, 55, 72, 0.8);
+      padding: 15px 25px;
+      border-radius: 12px;
+      box-shadow: 0 4px 15px rgba(0, 0, 0, 0.2);
+    }
+
+    h1 {
+      color: #fbbf24;
+      font-size: 28px;
+    }
+
+    .back-btn {
+      background-color: #4a5568;
+      color: white;
+      padding: 10px 20px;
+      border-radius: 8px;
+      text-decoration: none;
+      transition: all 0.3s ease;
+      font-weight: 600;
+      display: inline-flex;
+      align-items: center;
+    }
+
+    .back-btn:hover {
+      background-color: #718096;
+      transform: translateY(-3px);
+    }
+
+    .add-btn {
+      background-color: #38a169;
+      color: white;
+      padding: 10px 20px;
+      border-radius: 8px;
+      text-decoration: none;
+      transition: all 0.3s ease;
+      font-weight: 600;
+      display: inline-flex;
+      align-items: center;
+      margin-bottom: 20px;
+    }
+
+    .add-btn:hover {
+      background-color: #2f855a;
+      transform: translateY(-3px);
+    }
+
+    .filter-container {
+      display: flex;
+      gap: 15px;
+      margin-bottom: 20px;
+      flex-wrap: wrap;
+    }
+
+    .filter-container select {
+      flex: 1;
+      min-width: 200px;
+      padding: 12px 15px;
+      border-radius: 8px;
+      border: 1px solid rgba(255, 255, 255, 0.1);
+      background-color: #4a5568;
+      color: white;
+      font-size: 16px;
+    }
+
+    .filter-container select:focus {
+      outline: none;
+      border-color: #fbbf24;
+    }
+
+    .search-bar {
+      margin-bottom: 20px;
+      display: flex;
+      gap: 10px;
+    }
+
+    .search-bar input {
+      flex: 1;
+      padding: 12px 15px;
+      border-radius: 8px;
+      border: 1px solid rgba(255, 255, 255, 0.1);
+      background-color: #4a5568;
+      color: white;
+      font-size: 16px;
+    }
+
+    .search-bar input:focus {
+      outline: none;
+      border-color: #fbbf24;
+    }
+
+    .classes-container {
+      display: grid;
+      grid-template-columns: 1fr;
+      gap: 20px;
+    }
+
+    .class-card {
+      background-color: rgba(45, 55, 72, 0.8);
+      border-radius: 12px;
+      padding: 20px;
+      box-shadow: 0 4px 15px rgba(0, 0, 0, 0.2);
+      transition: transform 0.3s ease;
+      position: relative;
+    }
+
+    .class-card:hover {
+      transform: translateY(-5px);
+    }
+
+    .class-title {
+      font-size: 22px;
+      color: #fbbf24;
+      margin-bottom: 10px;
+    }
+
+    .class-info {
+      margin-bottom: 15px;
+    }
+
+    .class-info p {
+      margin-bottom: 5px;
+      display: flex;
+      align-items: center;
+    }
+
+    .class-info p span {
+      margin-right: 10px;
+      color: #a0aec0;
+    }
+
+    .class-actions {
+      display: flex;
+      gap: 10px;
+      margin-top: 15px;
+    }
+
+    .action-btn {
+      padding: 8px 15px;
+      border-radius: 6px;
+      border: none;
+      cursor: pointer;
+      font-weight: 600;
+      transition: all 0.3s ease;
+      font-family: 'Cairo', sans-serif;
+    }
+
+    .edit-btn {
+      background-color: #3182ce;
+      color: white;
+    }
+
+    .edit-btn:hover {
+      background-color: #2c5282;
+    }
+
+    .delete-btn {
+      background-color: #e53e3e;
+      color: white;
+    }
+
+    .delete-btn:hover {
+      background-color: #c53030;
+    }
+
+    .view-btn {
+      background-color: #805ad5;
+      color: white;
+    }
+
+    .view-btn:hover {
+      background-color: #6b46c1;
+    }
+
+    .class-id {
+      position: absolute;
+      top: 15px;
+      left: 15px;
+      background-color: rgba(26, 32, 44, 0.7);
+      color: #a0aec0;
+      padding: 5px 10px;
+      border-radius: 20px;
+      font-size: 12px;
+    }
+
+    .modal {
+      display: none;
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      background-color: rgba(0, 0, 0, 0.7);
+      z-index: 1000;
+      justify-content: center;
+      align-items: center;
+    }
+
+    .modal-content {
+      background-color: #2d3748;
+      padding: 30px;
+      border-radius: 12px;
+      width: 90%;
+      max-width: 600px;
+      box-shadow: 0 5px 20px rgba(0, 0, 0, 0.3);
+      position: relative;
+      max-height: 90vh;
+      overflow-y: auto;
+    }
+
+    .close-modal {
+      position: absolute;
+      top: 15px;
+      right: 15px;
+      font-size: 24px;
+      cursor: pointer;
+      color: #a0aec0;
+    }
+
+    .modal-title {
+      color: #fbbf24;
+      margin-bottom: 20px;
+      font-size: 24px;
+    }
+
+    .form-group {
+      margin-bottom: 15px;
+    }
+
+    .form-group label {
+      display: block;
+      margin-bottom: 8px;
+      color: #e2e8f0;
+    }
+
+    .form-group input, .form-group select, .form-group textarea {
+      width: 100%;
+      padding: 12px;
+      border-radius: 8px;
+      border: 1px solid rgba(255, 255, 255, 0.1);
+      background-color: #4a5568;
+      color: white;
+      font-size: 16px;
+    }
+
+    .form-group textarea {
+      min-height: 100px;
+      resize: vertical;
+    }
+
+    .form-group input:focus, .form-group select:focus, .form-group textarea:focus {
+      outline: none;
+      border-color: #fbbf24;
+    }
+
+    .submit-btn {
+      background-color: #fbbf24;
+      color: #1a202c;
+      padding: 12px 20px;
+      border: none;
+      border-radius: 8px;
+      font-size: 16px;
+      cursor: pointer;
+      width: 100%;
+      margin-top: 10px;
+      font-weight: 600;
+      transition: all 0.3s ease;
+    }
+
+    .submit-btn:hover {
+      background-color: #f59e0b;
+    }
+
+    .message {
+      padding: 10px 15px;
+      border-radius: 8px;
+      margin-bottom: 15px;
+      display: none;
+    }
+
+    .success {
+      background-color: rgba(56, 161, 105, 0.2);
+      color: #9ae6b4;
+      border: 1px solid #38a169;
+    }
+
+    .error {
+      background-color: rgba(229, 62, 62, 0.2);
+      color: #feb2b2;
+      border: 1px solid #e53e3e;
+    }
+
+    .no-classes {
+      text-align: center;
+      padding: 40px;
+      background-color: rgba(45, 55, 72, 0.8);
+      border-radius: 12px;
+      color: #a0aec0;
+    }
+
+    .month-badge, .grade-badge {
+      display: inline-block;
+      padding: 5px 10px;
+      border-radius: 20px;
+      font-size: 14px;
+      margin-right: 5px;
+      background-color: #4a5568;
+      color: white;
+    }
+
+    .month-badge {
+      background-color: #805ad5;
+    }
+
+    .grade-badge {
+      background-color: #3182ce;
+    }
+
+    @media (min-width: 768px) {
+      .classes-container {
+        grid-template-columns: repeat(2, 1fr);
+      }
+    }
+
+    @media (min-width: 1024px) {
+      .classes-container {
+        grid-template-columns: repeat(3, 1fr);
+      }
+    }
+  </style>
+</head>
+<body>
+  <div class="container">
+    <header>
+      <h1>إدارة الدروس</h1>
+      <a href="/teacher/dashboard" class="back-btn">العودة للوحة التحكم</a>
+    </header>
+
+    <a href="/teacher/create-class" class="add-btn">➕ إضافة درس جديد</a>
+
+    <div class="filter-container">
+      <select id="monthFilter">
+        <option value="">جميع الشهور</option>
+        <!-- سيتم إضافة الشهور هنا بواسطة JavaScript -->
+      </select>
+      <select id="gradeFilter">
+        <option value="">جميع المراحل</option>
+        <option value="1">أولى إعدادي</option>
+        <option value="2">ثانية إعدادي</option>
+        <option value="3">ثالثة إعدادي</option>
+        <option value="4">أولى ثانوي</option>
+        <option value="5">ثانية ثانوي</option>
+        <option value="6">ثالثة ثانوي</option>
+      </select>
+    </div>
+
+    <div class="search-bar">
+      <input type="text" id="searchInput" placeholder="ابحث عن درس...">
+    </div>
+
+    <div id="message" class="message"></div>
+
+    <div id="classesContainer" class="classes-container">
+      <!-- سيتم إضافة بطاقات الدروس هنا بواسطة JavaScript -->
+      <div class="no-classes" id="noClasses" style="display: none;">
+        <h3>لا توجد دروس حالياً</h3>
+        <p>قم بإضافة دروس جديدة من خلال صفحة إضافة درس جديد</p>
+      </div>
+    </div>
+  </div>
+
+  <!-- نافذة تعديل بيانات الدرس -->
+  <div id="editModal" class="modal">
+    <div class="modal-content">
+      <span class="close-modal" id="closeEditModal">&times;</span>
+      <h2 class="modal-title">تعديل بيانات الدرس</h2>
+      <div id="editMessage" class="message"></div>
+      <form id="editClassForm">
+        <input type="hidden" id="editClassId">
+        <div class="form-group">
+          <label for="editClassTitle">عنوان الدرس</label>
+          <input type="text" id="editClassTitle" required>
+        </div>
+        <div class="form-group">
+          <label for="editClassDescription">وصف الدرس</label>
+          <textarea id="editClassDescription" required></textarea>
+        </div>
+        <div class="form-group">
+          <label for="editClassGrade">المرحلة الدراسية</label>
+          <select id="editClassGrade" required>
+            <option value="1">أولى إعدادي</option>
+            <option value="2">ثانية إعدادي</option>
+            <option value="3">ثالثة إعدادي</option>
+            <option value="4">أولى ثانوي</option>
+            <option value="5">ثانية ثانوي</option>
+            <option value="6">ثالثة ثانوي</option>
+          </select>
+        </div>
+        <div class="form-group">
+          <label for="editClassMonth">الشهر</label>
+          <select id="editClassMonth" required>
+            <!-- سيتم إضافة الشهور هنا بواسطة JavaScript -->
+          </select>
+        </div>
+        <div class="form-group">
+          <label for="editClassUrl">رابط الفيديو</label>
+          <input type="url" id="editClassUrl" required>
+        </div>
+        <div class="form-group">
+          <label for="editClassPdf">رابط ملف PDF (اختياري)</label>
+          <input type="url" id="editClassPdf">
+        </div>
+        <div class="form-group">
+          <label for="editClassExams">رابط الامتحانات (اختياري)</label>
+          <input type="url" id="editClassExams">
+        </div>
+        <button type="submit" class="submit-btn">حفظ التغييرات</button>
+      </form>
+    </div>
+  </div>
+
+  <!-- نافذة تأكيد الحذف -->
+  <div id="deleteModal" class="modal">
+    <div class="modal-content">
+      <span class="close-modal" id="closeDeleteModal">&times;</span>
+      <h2 class="modal-title">تأكيد حذف الدرس</h2>
+      <div id="deleteMessage" class="message"></div>
+      <p style="margin-bottom: 20px;">هل أنت متأكد من حذف درس <strong id="deleteClassName"></strong>؟</p>
+      <p style="margin-bottom: 20px; color: #e53e3e;">هذا الإجراء لا يمكن التراجع عنه!</p>
+      <form id="deleteClassForm">
+        <input type="hidden" id="deleteClassId">
+        <button type="submit" class="submit-btn" style="background-color: #e53e3e;">تأكيد الحذف</button>
+        <button type="button" id="cancelDelete" class="submit-btn" style="background-color: #4a5568; margin-top: 10px;">إلغاء</button>
+      </form>
+    </div>
+  </div>
+
+  <script>
+    // سيتم إضافة كود JavaScript هنا
+    document.addEventListener('DOMContentLoaded', function() {
+      // جلب بيانات الدروس
+      fetchClasses();
+
+      // البحث في الدروس
+      document.getElementById('searchInput').addEventListener('input', function() {
+        filterClasses();
+      });
+
+      // تصفية الدروس حسب الشهر
+      document.getElementById('monthFilter').addEventListener('change', function() {
+        filterClasses();
+      });
+
+      // تصفية الدروس حسب المرحلة
+      document.getElementById('gradeFilter').addEventListener('change', function() {
+        filterClasses();
+      });
+
+      // إغلاق النوافذ المنبثقة
+      document.getElementById('closeEditModal').addEventListener('click', function() {
+        document.getElementById('editModal').style.display = 'none';
+      });
+
+      document.getElementById('closeDeleteModal').addEventListener('click', function() {
+        document.getElementById('deleteModal').style.display = 'none';
+      });
+
+      document.getElementById('cancelDelete').addEventListener('click', function() {
+        document.getElementById('deleteModal').style.display = 'none';
+      });
+
+      // تقديم نموذج تعديل الدرس
+      document.getElementById('editClassForm').addEventListener('submit', function(e) {
+        e.preventDefault();
+        updateClass();
+      });
+
+      // تقديم نموذج حذف الدرس
+      document.getElementById('deleteClassForm').addEventListener('submit', function(e) {
+        e.preventDefault();
+        deleteClass();
+      });
+    });
+
+    // دالة لجلب بيانات الدروس
+    async function fetchClasses() {
+      try {
+        const response = await fetch('/teacher/classes-data');
+
+        if (!response.ok) {
+          throw new Error(`HTTP error! status: ${response.status}`);
+        }
+
+        const data = await response.json();
+
+        if (data.classes && data.classes.length > 0) {
+          // تخزين الشهور للاستخدام في التصفية والتعديل
+          populateMonthsDropdown(data.months);
+
+          // عرض الدروس
+          renderClasses(data.classes, data.months);
+
+          // التحقق من وجود العنصر قبل تغيير خاصية العرض
+          const noClassesElement = document.getElementById('noClasses');
+          if (noClassesElement) {
+            noClassesElement.style.display = 'none';
+          }
+        } else {
+          const noClassesElement = document.getElementById('noClasses');
+          if (noClassesElement) {
+            noClassesElement.style.display = 'block';
+          } else {
+            // إذا لم يكن العنصر موجودًا، أضف رسالة بديلة
+            const container = document.getElementById('classesContainer');
+            container.innerHTML = `
+              <div class="no-classes">
+                <h3>لا توجد دروس حالياً</h3>
+                <p>قم بإضافة دروس جديدة من خلال صفحة إضافة درس جديد</p>
+              </div>
+            `;
+          }
+        }
+      } catch (error) {
+        console.error('خطأ في جلب بيانات الدروس:', error);
+        const messageElement = document.getElementById('message');
+        if (messageElement) {
+          messageElement.textContent = 'حدث خطأ أثناء جلب بيانات الدروس';
+          messageElement.className = 'message error';
+          messageElement.style.display = 'block';
+
+          setTimeout(() => {
+            messageElement.style.display = 'none';
+          }, 5000);
+        }
+      }
+    }
+
+    // دالة لملء قائمة الشهور
+    function populateMonthsDropdown(months) {
+      const monthFilter = document.getElementById('monthFilter');
+      const editClassMonth = document.getElementById('editClassMonth');
+
+      // حذف جميع الخيارات ما عدا الخيار الافتراضي
+      while (monthFilter.options.length > 1) {
+        monthFilter.remove(1);
+      }
+
+      // حذف جميع الخيارات
+      editClassMonth.innerHTML = '';
+
+      // إضافة الشهور إلى قوائم الاختيار
+      months.forEach(month => {
+        // إضافة الشهر إلى قائمة التصفية
+        const filterOption = document.createElement('option');
+        filterOption.value = month.id;
+        filterOption.textContent = month.name;
+        monthFilter.appendChild(filterOption);
+
+        // إضافة الشهر إلى قائمة التعديل
+        const editOption = document.createElement('option');
+        editOption.value = month.id;
+        editOption.textContent = month.name;
+        editClassMonth.appendChild(editOption);
+      });
+    }
+
+    // دالة لعرض بيانات الدروس
+    function renderClasses(classes, months) {
+      const container = document.getElementById('classesContainer');
+      container.innerHTML = '';
+
+      classes.forEach(lesson => {
+        const classCard = document.createElement('div');
+        classCard.className = 'class-card';
+        classCard.dataset.id = lesson.id;
+        classCard.dataset.title = lesson.title;
+        classCard.dataset.description = lesson.description;
+        classCard.dataset.grade = lesson.grade;
+        classCard.dataset.monthId = lesson.monthId;
+        classCard.dataset.url = lesson.url;
+        classCard.dataset.pdf = lesson.pdf || '';
+        classCard.dataset.exams = lesson.exams || '';
+
+        // البحث عن اسم الشهر
+        const month = months.find(m => m.id === lesson.monthId);
+        const monthName = month ? month.name : 'غير معروف';
+
+        // تحويل المرحلة الدراسية إلى نص مفهوم
+        let gradeText = '';
+        switch(parseInt(lesson.grade)) {
+          case 1: gradeText = 'أولى إعدادي'; break;
+          case 2: gradeText = 'ثانية إعدادي'; break;
+          case 3: gradeText = 'ثالثة إعدادي'; break;
+          case 4: gradeText = 'أولى ثانوي'; break;
+          case 5: gradeText = 'ثانية ثانوي'; break;
+          case 6: gradeText = 'ثالثة ثانوي'; break;
+          default: gradeText = 'غير محدد';
+        }
+
+        classCard.innerHTML = `
+          <div class="class-id">ID: ${lesson.id}</div>
+          <h3 class="class-title">📝 ${lesson.title}</h3>
+          <div class="class-info">
+            <p><strong>الشهر:</strong> <span class="month-badge">${monthName}</span></p>
+            <p><strong>المرحلة الدراسية:</strong> <span class="grade-badge">${gradeText}</span></p>
+            <p><strong>الوصف:</strong> <span>${lesson.description.substring(0, 100)}${lesson.description.length > 100 ? '...' : ''}</span></p>
+          </div>
+          <div class="class-actions">
+            <button class="action-btn edit-btn" onclick="openEditModal(${lesson.id})">تعديل</button>
+            <button class="action-btn view-btn" onclick="window.open('${lesson.url}', '_blank')">عرض الفيديو</button>
+            <button class="action-btn delete-btn" onclick="openDeleteModal(${lesson.id})">حذف</button>
+          </div>
+        `;
+
+        container.appendChild(classCard);
+      });
+    }
+
+    // دالة لتصفية الدروس
+    function filterClasses() {
+      const searchTerm = document.getElementById('searchInput').value.toLowerCase();
+      const monthId = document.getElementById('monthFilter').value;
+      const grade = document.getElementById('gradeFilter').value;
+
+      const classCards = document.querySelectorAll('.class-card');
+
+      classCards.forEach(card => {
+        const title = card.dataset.title.toLowerCase();
+        const description = card.dataset.description.toLowerCase();
+        const cardMonthId = card.dataset.monthId;
+        const cardGrade = card.dataset.grade;
+
+        const matchesSearch = title.includes(searchTerm) || description.includes(searchTerm);
+        const matchesMonth = monthId === '' || cardMonthId === monthId;
+        const matchesGrade = grade === '' || cardGrade === grade;
+
+        if (matchesSearch && matchesMonth && matchesGrade) {
+          card.style.display = 'block';
+        } else {
+          card.style.display = 'none';
+        }
+      });
+    }
+
+    // دالة لفتح نافذة تعديل الدرس
+    function openEditModal(classId) {
+      const classCard = document.querySelector(`.class-card[data-id="${classId}"]`);
+
+      document.getElementById('editClassId').value = classId;
+      document.getElementById('editClassTitle').value = classCard.dataset.title;
+      document.getElementById('editClassDescription').value = classCard.dataset.description;
+      document.getElementById('editClassGrade').value = classCard.dataset.grade;
+      document.getElementById('editClassMonth').value = classCard.dataset.monthId;
+      document.getElementById('editClassUrl').value = classCard.dataset.url;
+      document.getElementById('editClassPdf').value = classCard.dataset.pdf;
+      document.getElementById('editClassExams').value = classCard.dataset.exams;
+
+      document.getElementById('editModal').style.display = 'flex';
+    }
+
+    // دالة لفتح نافذة تأكيد الحذف
+    function openDeleteModal(classId) {
+      const classCard = document.querySelector(`.class-card[data-id="${classId}"]`);
+
+      document.getElementById('deleteClassId').value = classId;
+      document.getElementById('deleteClassName').textContent = classCard.dataset.title;
+
+      document.getElementById('deleteModal').style.display = 'flex';
+    }
+
+    // دالة لتحديث بيانات الدرس
+    async function updateClass() {
+      const classId = document.getElementById('editClassId').value;
+      const title = document.getElementById('editClassTitle').value;
+      const description = document.getElementById('editClassDescription').value;
+      const grade = document.getElementById('editClassGrade').value;
+      const monthId = document.getElementById('editClassMonth').value;
+      const url = document.getElementById('editClassUrl').value;
+      const pdf = document.getElementById('editClassPdf').value;
+      const exams = document.getElementById('editClassExams').value;
+
+      try {
+        const response = await fetch(`/teacher/update-class/${classId}`, {
+          method: 'PUT',
+          headers: {
+            'Content-Type': 'application/json'
+          },
+          body: JSON.stringify({
+            title,
+            description,
+            grade,
+            monthId,
+            url,
+            pdf,
+            exams
+          })
+        });
+
+        const data = await response.json();
+
+        if (response.ok) {
+          showMessage(data.message, 'success', 'editMessage');
+          setTimeout(() => {
+            document.getElementById('editModal').style.display = 'none';
+            fetchClasses(); // تحديث قائمة الدروس
+          }, 1500);
+        } else {
+          showMessage(data.errorMessage, 'error', 'editMessage');
+        }
+      } catch (error) {
+        console.error('خطأ في تحديث بيانات الدرس:', error);
+        showMessage('حدث خطأ أثناء تحديث بيانات الدرس', 'error', 'editMessage');
+      }
+    }
+
+    // دالة لحذف الدرس
+    async function deleteClass() {
+      const classId = document.getElementById('deleteClassId').value;
+
+      try {
+        const response = await fetch(`/teacher/delete-class/${classId}`, {
+          method: 'DELETE'
+        });
+
+        const data = await response.json();
+
+        if (response.ok) {
+          showMessage(data.message, 'success', 'deleteMessage');
+          setTimeout(() => {
+            document.getElementById('deleteModal').style.display = 'none';
+            fetchClasses(); // تحديث قائمة الدروس
+          }, 1500);
+        } else {
+          showMessage(data.errorMessage, 'error', 'deleteMessage');
+        }
+      } catch (error) {
+        console.error('خطأ في حذف الدرس:', error);
+        showMessage('حدث خطأ أثناء حذف الدرس', 'error', 'deleteMessage');
+      }
+    }
+
+    // دالة لعرض الرسائل
+    function showMessage(message, type, elementId) {
+      const messageElement = document.getElementById(elementId);
+      messageElement.textContent = message;
+      messageElement.className = `message ${type}`;
+      messageElement.style.display = 'block';
+
+      setTimeout(() => {
+        messageElement.style.display = 'none';
+      }, 5000);
+    }
+  </script>
+</body>
+</html>

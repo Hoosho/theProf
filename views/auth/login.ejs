@@ -127,34 +127,12 @@
       <div id="message" class="message"></div>
       <form id="loginForm">
         <input type="text" id="code" name="code" placeholder="اكتب كودك يا نجم" required />
-        <select id="role" name="role">
-          <option value="teacher">معلم</option>
-          <option value="student">طالب</option>
-        </select>
         <button type="submit">ادخلني</button>
       </form>
-      <div class="note">
-        <p>أكواد الاختبار:</p>
-        <p>طالب 1: <strong id="student1-id">جاري التحميل...</strong></p>
-        <p>طالب 2: <strong id="student2-id">جاري التحميل...</strong></p>
-        <p>معلم: <strong id="teacher-id">جاري التحميل...</strong></p>
-      </div>
     </div>
   </div>
 
   <script>
-    // جلب أكواد الاختبار من الخادم
-    fetch('/auth/test-ids')
-      .then(res => res.json())
-      .then(data => {
-        document.getElementById('student1-id').textContent = data.student1Id || 'غير متوفر';
-        document.getElementById('student2-id').textContent = data.student2Id || 'غير متوفر';
-        document.getElementById('teacher-id').textContent = data.teacherId || 'غير متوفر';
-      })
-      .catch(err => {
-        console.error('خطأ في جلب أكواد الاختبار:', err);
-      });
-
     // دالة لعرض رسائل الخطأ أو النجاح
     function showMessage(message, type) {
       const messageElement = document.getElementById('message');
@@ -176,10 +154,9 @@
       e.preventDefault(); // منع إعادة تحميل الصفحة
 
       const code = document.getElementById("code").value;
-      const role = document.getElementById("role").value;
 
-      if (!code || !role) {
-        showMessage("يرجى إدخال جميع البيانات.", "error");
+      if (!code) {
+        showMessage("يرجى إدخال الكود.", "error");
         return;
       }
 
@@ -190,8 +167,7 @@
       fetch('/auth/login', {
         method: 'POST',
         body: JSON.stringify({
-          code: code,
-          role: role
+          code: code
         }),
         headers: {
           'Content-Type': 'application/json'

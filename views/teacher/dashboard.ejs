@@ -11,7 +11,7 @@
       padding: 0;
       box-sizing: border-box;
     }
-    
+
     body {
       background-color: #1a202c;
       font-family: 'Cairo', sans-serif;
@@ -65,21 +65,21 @@
     .logout:hover {
       background-color: #e60000 !important;
     }
-    
+
     p {
       margin-bottom: 20px;
       font-size: 18px;
     }
-    
+
     @media (max-width: 768px) {
       .dashboard {
         padding: 30px 20px;
       }
-      
+
       h1 {
         font-size: 24px;
       }
-      
+
       .dashboard a {
         font-size: 16px;
         padding: 12px;
@@ -92,12 +92,21 @@
     <h1>👋 أهلاً بيك يا مستر <%= teacherName %></h1>
     <p>إختار اللي حابب تعمله النهارده ✨</p>
 
+    <h2 style="color: #e2e8f0; margin: 20px 0 10px; font-size: 20px; text-align: right;">إدارة الطلاب</h2>
     <a href="/teacher/add-student">👨‍🎓 إضافة طالب جديد</a>
-    <a href="/teacher/create-class">📝 إضافة درس</a>
-    <a href="/teacher/create-month">📅 إضافة شهر</a>
-    <a href="/auth/logout" class="logout">🚪 تسجيل الخروج</a>
+    <a href="/teacher/students">📋 عرض وإدارة الطلاب</a>
+
+    <h2 style="color: #e2e8f0; margin: 20px 0 10px; font-size: 20px; text-align: right;">إدارة الشهور</h2>
+    <a href="/teacher/create-month">📅 إضافة شهر جديد</a>
+    <a href="/teacher/months-list">📆 عرض وإدارة الشهور</a>
+
+    <h2 style="color: #e2e8f0; margin: 20px 0 10px; font-size: 20px; text-align: right;">إدارة الدروس</h2>
+    <a href="/teacher/create-class">📝 إضافة درس جديد</a>
+    <a href="/teacher/classes-list">📚 عرض وإدارة الدروس</a>
+
+    <a href="/auth/logout" class="logout" style="margin-top: 30px;">🚪 تسجيل الخروج</a>
   </div>
-  
+
   <script>
     // يمكن إضافة أي كود JavaScript إضافي هنا
   </script>

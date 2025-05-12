@@ -39,16 +39,30 @@ router.get('/dashboard', async (req, res) => {
       });
     }
 
-    // عرض جميع الشهور المتاحة من المعلم بغض النظر عن المرحلة الدراسية
+    // تحديد المرحلة الدراسية للطالب
+    let studentGradeNumber;
+    if (student.studentGrade.includes('prep')) {
+      // المرحلة الإعدادية
+      studentGradeNumber = parseInt(student.studentGrade.charAt(0));
+    } else if (student.studentGrade.includes('high')) {
+      // المرحلة الثانوية
+      studentGradeNumber = parseInt(student.studentGrade.charAt(0)) + 3;
+    } else {
+      studentGradeNumber = 1; // قيمة افتراضية
+    }
+
+    console.log(`المرحلة الدراسية للطالب: ${studentGradeNumber}`);
     console.log(`عدد الشهور المتاحة من المعلم: ${teacher.availableMonths.length}`);
 
-    // تحويل جميع الشهور إلى التنسيق المطلوب
-    const availableMonths = teacher.availableMonths.map(month => ({
-      id: month.id,
-      name: month.name,
-      price: month.pricOfMonth,
-      grade: month.grade
-    }));
+    // تحويل الشهور المناسبة للمرحلة الدراسية للطالب فقط
+    const availableMonths = teacher.availableMonths
+      .filter(month => month.grade === 0 || month.grade === studentGradeNumber) // الشهور العامة (grade=0) أو المناسبة للمرحلة
+      .map(month => ({
+        id: month.id,
+        name: month.name,
+        price: month.pricOfMonth,
+        grade: month.grade === 0 ? 'جميع المراحل' : month.grade
+      }));
 
     // تحديد الشهور التي اشترى فيها الطالب بالفعل
     const boughtMonthIds = student.boughtMonths.map(month => month.monthId);
@@ -123,21 +137,22 @@ router.get('/months/:id', async (req, res) => {
       });
     }
 
-    // جلب جميع الدروس من قاعدة بيانات المعلم بغض النظر عن الشهر
-    // لكن سنضيف علامة لتمييز الدروس المرتبطة بهذا الشهر
-    const lessons = teacher.availableClasses.map(lesson => {
-      return {
-        id: lesson.id,
-        title: lesson.title,
-        description: lesson.description,
-        grade: lesson.grade,
-        monthId: lesson.monthId,
-        url: lesson.url,
-        pdf: lesson.pdf,
-        exams: lesson.exams,
-        isCurrentMonth: lesson.monthId === monthId
-      };
-    });
+    // جلب الدروس المرتبطة بالشهر المحدد فقط
+    const lessons = teacher.availableClasses
+      .filter(lesson => lesson.monthId === monthId)
+      .map(lesson => {
+        return {
+          id: lesson.id,
+          title: lesson.title,
+          description: lesson.description,
+          grade: lesson.grade,
+          monthId: lesson.monthId,
+          url: lesson.url,
+          pdf: lesson.pdf,
+          exams: lesson.exams,
+          isCurrentMonth: true // جميع الدروس الآن مرتبطة بالشهر الحالي
+        };
+      });
 
     // ترتيب الدروس حسب الرقم التسلسلي
     lessons.sort((a, b) => a.id - b.id);
